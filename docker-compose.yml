@@ -6,7 +6,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - borehole_database:/var/lib/borehole_database
+      - postgres:/var/lib/postgres
       - ./_common:/_common
     environment:
       POSTGRES_USER: admin
@@ -25,11 +25,11 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: borehole_database
       POSTGRES_PORT: 5432
-      POSTGRES_HOST: borehole_database
+      POSTGRES_HOST: postgres
     restart: always
     depends_on:
-        - borehole_database
+        - postgres
 
 volumes:
-  borehole_database:
+  postgres:
     driver: local
