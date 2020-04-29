@@ -1,2 +1,2 @@
-# krak-server
-Krak server orchestration
+# krak-drillhole-db
+Drillhole database for Krak
