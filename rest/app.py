@@ -1,8 +1,8 @@
 from sqlalchemy import event
 from sqlalchemy.orm import mapper
 
-from app import connex_app
-from app import tables
+from config import connex_app
+import tables
 
 if __name__ == '__main__':
     event.listen(mapper, 'after_configured', tables.setup_schema)
