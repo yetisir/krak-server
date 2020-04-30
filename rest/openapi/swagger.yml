@@ -11,7 +11,7 @@ servers:
 paths:
   /borehole:
     get:
-      operationId: app.borehole.read_all
+      operationId: borehole.read_all
       summary: Read all boreholes in db, sorted by id
       description: Read all boreholes in db, sorted by id
       tags:
@@ -26,7 +26,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/borehole_output"
     post:
-      operationId: app.borehole.create
+      operationId: borehole.create
       summary: Create a new borehole
       description: Create a new borehole
       tags:
@@ -47,7 +47,7 @@ paths:
                 $ref: "#/components/schemas/borehole_output"
   /borehole/{borehole_id}:
     get:
-      operationId: app.borehole.read_one
+      operationId: borehole.read_one
       summary: Read one borehole
       description: Read one borehole
       tags:
@@ -67,7 +67,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/borehole_output"
     put:
-      operationId: app.borehole.update
+      operationId: borehole.update
       tags:
         - Borehole
       summary: Update a borehole
@@ -92,7 +92,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/borehole_output"
     delete:
-      operationId: app.borehole.delete
+      operationId: borehole.delete
       summary: Delete a borehole
       description: Delete a borehole
       tags:
@@ -109,7 +109,7 @@ paths:
           description: Successfully deleted borehole
   /core_photo:
     get:
-      operationId: app.core_photo.read_all
+      operationId: core_photo.read_all
       summary: Read all core photo ids in db, sorted by id
       description: Read all core photo ids in db, sorted by id
       tags:
@@ -124,7 +124,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/core_photo_output"
     post:
-      operationId: app.core_photo.create
+      operationId: core_photo.create
       summary: Create a new core photo
       description: Create a new core photo
       tags:
