@@ -1,4 +1,5 @@
 import time
+import logging
 
 from sqlalchemy import event
 from sqlalchemy.orm import mapper
@@ -8,12 +9,16 @@ import tables
 
 
 def main():
+
+    # initialization loop just incase this server initializes before postgres
     try:
         sql.create_all()
     except OperationalError:
-        app.logger.info('Unable to connect to database Trying again in 1s ...')
+        logging.error('Unable to connect to database. Trying again ...')
         time.sleep(1)
         main()
+    except KeyboardInterrupt:
+        exit()
 
     connex_app.add_api('openapi.yml')
     connex_app.run(host='0.0.0.0', port=5001, debug=True)

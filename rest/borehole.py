@@ -4,10 +4,10 @@ from config import sql
 import tables
 
 def read_all():
-
     boreholes = tables.Borehole.query.order_by(
         tables.Borehole.borehole_id).all()
-    schema = tables.Borehole.__marshmallow__(many=True)
+    schema = tables.BoreholeSchema(many=True)
+
     return schema.dump(boreholes)
 
 
@@ -21,7 +21,7 @@ def read_one(borehole_id):
     if not borehole_id_match:
         abort(404, f'Borehole id {borehole_id} not found')
 
-    schema = tables.Borehole.__marshmallow__()
+    schema = tables.BoreholeSchema()
     return schema.dump(borehole_id_match)
 
 
@@ -38,8 +38,8 @@ def create(body):
     if borehole_name_match:
         abort(409, f'Borehole {borehole_name} exists already')
 
-    schema = tables.Borehole.__marshmallow__()
-    new_borehole = schema.load(borehole, session=sql.session)
+    schema = tables.BoreholeSchema()
+    new_borehole = schema.load(borehole)
 
     sql.session.add(new_borehole)
     sql.session.commit()
@@ -71,8 +71,8 @@ def update(body, borehole_id):
             borehole_name_match.borehole_id != borehole_id):
         abort(409, f'Borehole name {borehole_name} already exists')
 
-    schema = tables.Borehole.__marshmallow__()
-    update = schema.load(borehole, session=sql.session)
+    schema = tables.BoreholeSchema()
+    update = schema.load(borehole)
     update.borehole_id = borehole_id
 
     sql.session.merge(update)
