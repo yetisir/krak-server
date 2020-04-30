@@ -30,4 +30,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 sql = SQLAlchemy(app)
+sql.create_all()
+
 ma = Marshmallow(app)

@@ -1,3 +1,0 @@
-[submodule "rest/openapi"]
-	path = rest/openapi
-	url = https://github.com/yetisir/krak-openapi
