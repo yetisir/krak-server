@@ -5,6 +5,7 @@ import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+
 base_dir = pathlib.Path(__file__).parent
 openapi_dir = base_dir / 'openapi'
 
@@ -30,6 +31,5 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 sql = SQLAlchemy(app)
-sql.create_all()
-
 ma = Marshmallow(app)
+
