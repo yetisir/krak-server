@@ -19,8 +19,7 @@ class Survey(sql.Model):
     __tablename__ = 'survey'
 
     id = sql.Column(sql.Integer(), primary_key=True)
-    borehole_id = sql.Column(
-        sql.Integer(), sql.ForeignKey('borehole.id'))
+    borehole_id = sql.Column(sql.Integer(), sql.ForeignKey('borehole.id'))
     depth = sql.Column(sql.Float(), nullable=False)
     azimuth = sql.Column(sql.Float(), nullable=False)
     dip = sql.Column(sql.Float(), nullable=False)
@@ -30,29 +29,37 @@ class SurveySchema(ma.SQLAlchemyAutoSchema):
     Meta = schema_metadata(Survey)
 
 
+class CorePhotoCorner(sql.Model):
+    __tablename__ = 'core_photo_corner'
+
+    id = sql.Column(sql.Integer, primary_key=True)
+    core_photo_id = sql.Column(sql.Integer, sql.ForeignKey('core_photo_log.id'))
+    top = sql.Column(sql.Float(), nullable=False)
+    left = sql.Column(sql.Float(), nullable=False)
+
+
+class CorePhotoCornerSchema(ma.SQLAlchemyAutoSchema):
+    Meta = schema_metadata(CorePhotoCorner)
+
+
 class CorePhotoLog(sql.Model):
     __tablename__ = 'core_photo_log'
 
-    id = sql.Column(sql.Integer, primary_key=True)
+    id = sql.Column(sql.Integer(), primary_key=True)
     hash = sql.Column(sql.Integer)
     borehole_id = sql.Column(sql.Integer(),
         sql.ForeignKey('borehole.id'), nullable=False)
-    depth_from = sql.Column(sql.Float(), primary_key=True)
+    depth_from = sql.Column(sql.Float(), nullable=False)
     depth_to = sql.Column(sql.Float(), nullable=False)
     path = sql.Column(sql.String(1024), nullable=False)
-    crop_corner_1 = sql.Column(
-        sql.Integer(), sql.ForeignKey('core_photo_corner.id'),
-        nullable=False)
-    crop_corner_2 = sql.Column(
-        sql.Integer(), sql.ForeignKey('core_photo_corner.id'),
-        nullable=False)
-    crop_corner_3 = sql.Column(
-        sql.Integer(), sql.ForeignKey('core_photo_corner.id'),
-        nullable=False)
-    crop_corner_4 = sql.Column(
-        sql.Integer(), sql.ForeignKey('core_photo_corner.id'),
-        nullable=False)
     comments = sql.Column(sql.String(1024))
+
+    core_photo_corners = sql.relationship(
+        CorePhotoCorner,
+        backref='core_photo',
+        cascade='all, delete, delete-orphan',
+        single_parent=True,
+    )
 
 
 class CorePhotoLogSchema(ma.SQLAlchemyAutoSchema):
@@ -85,25 +92,4 @@ class Borehole(sql.Model):
 
 class BoreholeSchema(ma.SQLAlchemyAutoSchema):
     Meta = schema_metadata(Borehole)
-
-
-class CorePhotoCorner(sql.Model):
-    __tablename__ = 'core_photo_corner'
-
-    id = sql.Column(sql.Integer, primary_key=True)
-    top = sql.Column(sql.Float(), nullable=False)
-    left = sql.Column(sql.Float(), nullable=False)
-
-    core_photo_logs = sql.relationship(
-        CorePhotoLog,
-        backref='core_photo_corner',
-        cascade='all, delete, delete-orphan',
-        single_parent=False,
-    )
-
-
-class CorePhotoCornerSchema(ma.SQLAlchemyAutoSchema):
-    Meta = schema_metadata(CorePhotoCorner)
-
-
-
+    #borehole_id = ma.auto_field('id')

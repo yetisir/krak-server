@@ -5,7 +5,7 @@ import tables
 
 def read_all():
     boreholes = tables.Borehole.query.order_by(
-        tables.Borehole.borehole_id).all()
+        tables.Borehole.id).all()
     schema = tables.BoreholeSchema(many=True)
 
     return schema.dump(boreholes)
