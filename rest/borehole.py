@@ -66,9 +66,9 @@ def update(body, borehole_id):
         .one_or_none()
     )
 
-    if (
-            borehole_name_match is not None and
-            borehole_name_match.borehole_id != borehole_id):
+    borehole_id_matches = borehole_name_match.borehole_id != borehole_id
+
+    if not borehole_name_match and borehole_id_matches:
         abort(409, f'Borehole name {borehole_name} already exists')
 
     schema = tables.BoreholeSchema()
