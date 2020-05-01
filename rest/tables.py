@@ -1,6 +1,7 @@
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import mapper
+from marshmallow_sqlalchemy import fields
 
 from config import sql, ma
 
@@ -33,7 +34,8 @@ class CorePhotoCorner(sql.Model):
     __tablename__ = 'core_photo_corner'
 
     id = sql.Column(sql.Integer, primary_key=True)
-    core_photo_id = sql.Column(sql.Integer, sql.ForeignKey('core_photo_log.id'))
+    cropped_core_photo_id = sql.Column(
+        sql.Integer, sql.ForeignKey('cropped_core_photo.id'))
     top = sql.Column(sql.Float(), nullable=False)
     left = sql.Column(sql.Float(), nullable=False)
 
@@ -42,8 +44,35 @@ class CorePhotoCornerSchema(ma.SQLAlchemyAutoSchema):
     Meta = schema_metadata(CorePhotoCorner)
 
 
+class CroppedCorePhoto(sql.Model):
+    __tablename__ = 'cropped_core_photo'
+
+    id = sql.Column(sql.Integer(), primary_key=True)
+    file_hash = sql.Column(sql.String(), nullable=False)
+    file_path = sql.Column(sql.String(512), nullable=False)
+    file_name = sql.Column(sql.String(128), nullable=False)
+    mime_type = sql.Column(sql.String, nullable=False)
+    core_photo_id = sql.Column(sql.Integer(),
+        sql.ForeignKey('core_photo.id'), nullable=False)
+    borehole_id = sql.Column(sql.Integer(),
+        sql.ForeignKey('borehole.id'), nullable=False)
+
+    core_photo_corners = sql.relationship(
+        CorePhotoCorner,
+        backref='cropped_core_photo',
+        cascade='all, delete, delete-orphan',
+        single_parent=True,
+    )
+
+class CroppedCorePhotoSchema(ma.SQLAlchemyAutoSchema):
+    Meta = schema_metadata(CroppedCorePhoto)
+    core_photo_corners = fields.Nested(
+        CorePhotoCornerSchema, many=True,
+        exclude=('id', 'cropped_core_photo_id'))
+
+
 class CorePhoto(sql.Model):
-    __tablename__ = 'core_photo_log'
+    __tablename__ = 'core_photo'
 
     id = sql.Column(sql.Integer(), primary_key=True)
     file_hash = sql.Column(sql.String(), nullable=False)
@@ -55,13 +84,6 @@ class CorePhoto(sql.Model):
     depth_from = sql.Column(sql.Float(), nullable=False)
     depth_to = sql.Column(sql.Float(), nullable=False)
     comments = sql.Column(sql.String(512))
-
-    core_photo_corners = sql.relationship(
-        CorePhotoCorner,
-        backref='core_photo',
-        cascade='all, delete, delete-orphan',
-        single_parent=True,
-    )
 
 
 class CorePhotoSchema(ma.SQLAlchemyAutoSchema):
@@ -84,8 +106,15 @@ class Borehole(sql.Model):
         single_parent=True,
     )
 
-    core_photo_logs = sql.relationship(
+    core_photos = sql.relationship(
         CorePhoto,
+        backref='borehole',
+        cascade='all, delete, delete-orphan',
+        single_parent=True,
+    )
+
+    cropped_core_photos = sql.relationship(
+        CroppedCorePhoto,
         backref='borehole',
         cascade='all, delete, delete-orphan',
         single_parent=True,
