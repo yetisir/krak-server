@@ -42,17 +42,19 @@ class CorePhotoCornerSchema(ma.SQLAlchemyAutoSchema):
     Meta = schema_metadata(CorePhotoCorner)
 
 
-class CorePhotoLog(sql.Model):
+class CorePhoto(sql.Model):
     __tablename__ = 'core_photo_log'
 
     id = sql.Column(sql.Integer(), primary_key=True)
-    hash = sql.Column(sql.Integer)
+    file_hash = sql.Column(sql.String(), nullable=False)
+    file_path = sql.Column(sql.String(512), nullable=False)
+    file_name = sql.Column(sql.String(128), nullable=False)
+    mime_type = sql.Column(sql.String, nullable=False)
     borehole_id = sql.Column(sql.Integer(),
         sql.ForeignKey('borehole.id'), nullable=False)
     depth_from = sql.Column(sql.Float(), nullable=False)
     depth_to = sql.Column(sql.Float(), nullable=False)
-    path = sql.Column(sql.String(1024), nullable=False)
-    comments = sql.Column(sql.String(1024))
+    comments = sql.Column(sql.String(512))
 
     core_photo_corners = sql.relationship(
         CorePhotoCorner,
@@ -62,8 +64,8 @@ class CorePhotoLog(sql.Model):
     )
 
 
-class CorePhotoLogSchema(ma.SQLAlchemyAutoSchema):
-    Meta = schema_metadata(CorePhotoLog)
+class CorePhotoSchema(ma.SQLAlchemyAutoSchema):
+    Meta = schema_metadata(CorePhoto)
 
 
 class Borehole(sql.Model):
@@ -83,7 +85,7 @@ class Borehole(sql.Model):
     )
 
     core_photo_logs = sql.relationship(
-        CorePhotoLog,
+        CorePhoto,
         backref='borehole',
         cascade='all, delete, delete-orphan',
         single_parent=True,

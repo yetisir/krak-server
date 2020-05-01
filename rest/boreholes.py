@@ -7,14 +7,13 @@ def read_all():
     boreholes = tables.Borehole.query.order_by(
         tables.Borehole.id).all()
     schema = tables.BoreholeSchema(many=True)
-
     return schema.dump(boreholes)
 
 
 def read_one(borehole_id):
     borehole_id_match = (
         tables.Borehole.query
-        .filter(tables.Borehole.borehole_id == borehole_id)
+        .filter(tables.Borehole.id == borehole_id)
         .one_or_none()
     )
 
@@ -53,7 +52,7 @@ def update(body, borehole_id):
 
     borehole_id_match = (
         tables.Borehole.query
-        .filter(tables.Borehole.borehole_id == borehole_id)
+        .filter(tables.Borehole.id == borehole_id)
         .one_or_none()
     )
 
@@ -73,7 +72,7 @@ def update(body, borehole_id):
 
     schema = tables.BoreholeSchema()
     update = schema.load(borehole)
-    update.borehole_id = borehole_id
+    update.id = borehole_id
 
     sql.session.merge(update)
     sql.session.commit()
@@ -85,7 +84,7 @@ def delete(borehole_id):
 
     borehole_id_match = (
         tables.Borehole.query
-        .filter(tables.Borehole.borehole_id == borehole_id)
+        .filter(tables.Borehole.id == borehole_id)
         .one_or_none()
     )
 
