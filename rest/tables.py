@@ -48,9 +48,7 @@ class CroppedCorePhoto(sql.Model):
     __tablename__ = 'cropped_core_photo'
 
     id = sql.Column(sql.Integer(), primary_key=True)
-    file_hash = sql.Column(sql.String(), nullable=False)
     file_path = sql.Column(sql.String(512), nullable=False)
-    file_name = sql.Column(sql.String(128), nullable=False)
     mime_type = sql.Column(sql.String, nullable=False)
     core_photo_id = sql.Column(sql.Integer(),
         sql.ForeignKey('core_photo.id'), nullable=False)

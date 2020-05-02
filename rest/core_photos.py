@@ -1,11 +1,12 @@
 import hashlib
 import pathlib
+import mimetypes
 
 from flask import make_response, abort
 
 from config import sql, app
 import tables
-
+import image_processing
 
 def read_all(borehole_id):
     boreholes = (
@@ -54,7 +55,10 @@ def create(borehole_id, photo, body):
     # if core_photo_hash_match:
     #     abort(409, f'Core photo with hash {core_photo_hash} exists already')
 
-    file_path = pathlib.Path('/var/lib/postgres_binary') / core_photo_hash
+    extension = mimetypes.guess_extension(photo.mimetype)
+    file_path = (
+        pathlib.Path('/var/lib/postgres_binary') /
+        core_photo_hash).with_suffix(extension)
 
     core_photo['file_hash'] = core_photo_hash
     core_photo['file_name'] = photo.filename
@@ -62,6 +66,7 @@ def create(borehole_id, photo, body):
     core_photo['mime_type'] = photo.mimetype
     core_photo['borehole_id'] = borehole_id
 
+    photo.stream.seek(0)
     photo.save(file_path.as_posix())
 
 
@@ -133,13 +138,15 @@ def crop(body, borehole_id, core_photo_id):
     schema = tables.CroppedCorePhotoSchema()
     core_photo = schema.dump(core_photo_id_match)
 
+    file_path = pathlib.Path(core_photo['file_path'])
+    cropped_file_path = pathlib.Path(
+        file_path.parent, f'{file_path.stem}_crop.png')
+    image_processing.crop(
+        file_path.as_posix(), cropped_file_path.as_posix(), image_processing.points_to_numpy(body))
+    # TODO: add error checking for image conversion
+    core_photo['file_path'] = cropped_file_path.as_posix()
+    core_photo['mime_type'] = 'image/png'
     core_photo['core_photo_id'] = core_photo_id
-    # * do photo cropping and get new hash and replace photo path below
-    core_photo['file_hash'] = core_photo['file_hash']
-    core_photo['file_name'] = core_photo['file_name']
-    core_photo['file_path'] = core_photo['file_path']
-    core_photo['mime_type'] = core_photo['mime_type']
-    # ************************************************************
 
     cropped_core_photo = schema.load(core_photo)
     corner_schema = tables.CorePhotoCornerSchema(many=True)
