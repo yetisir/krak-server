@@ -1,9 +1,9 @@
-import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
-import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
-import RemoteRenderingView from 'vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView';
-import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressBar';
+import logo from '@app/assets/logo.png';
+import VtkView from '@app/components/widgets/VtkView';
+import RemoteRenderingView from '@app/components/widgets/RemoteRenderingView';
+import ProgressBar from '@app/components/widgets/ProgressBar';
 
-import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+import { Mutations, Actions } from '@app/store/TYPES';
 
 // ----------------------------------------------------------------------------
 // Component API

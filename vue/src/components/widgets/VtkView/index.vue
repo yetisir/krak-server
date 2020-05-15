@@ -1,8 +1,8 @@
 <template
-  src="vue-vtkjs-pvw-template/src/components/widgets/VtkView/template.html"
+  src="@app/components/widgets/VtkView/template.html"
 />
 <style
   module
-  src="vue-vtkjs-pvw-template/src/components/widgets/VtkView/style.css"
+  src="@app/components/widgets/VtkView/style.css"
 />
-<script src="vue-vtkjs-pvw-template/src/components/widgets/VtkView/script.js" />
+<script src="@app/components/widgets/VtkView/script.js" />

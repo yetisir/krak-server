@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+import { Mutations } from '@app/store/TYPES';
 
 export default {
   state: {

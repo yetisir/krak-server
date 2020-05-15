@@ -1,4 +1,4 @@
-import { Actions, Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+import { Actions, Mutations } from '@app/store/TYPES';
 
 export default {
   state: {

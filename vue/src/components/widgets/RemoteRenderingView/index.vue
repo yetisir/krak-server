@@ -1,8 +1,8 @@
 <template
-  src="vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView/template.html"
+  src="@app/components/widgets/RemoteRenderingView/template.html"
 />
 <style
   module
-  src="vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView/style.css"
+  src="@app/components/widgets/RemoteRenderingView/style.css"
 />
-<script src="vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView/script.js" />
+<script src="@app/components/widgets/RemoteRenderingView/script.js" />

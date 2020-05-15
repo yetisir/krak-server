@@ -1,9 +1,9 @@
 import vtkWSLinkClient from 'vtk.js/Sources/IO/Core/WSLinkClient';
 import SmartConnect from 'wslink/src/SmartConnect';
 
-import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
+import coneProtocol from '@app/io/protocol';
 
-import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+import { Mutations } from '@app/store/TYPES';
 
 // Bind vtkWSLinkClient to our SmartConnect
 vtkWSLinkClient.setSmartConnectClass(SmartConnect);
