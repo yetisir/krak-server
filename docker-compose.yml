@@ -17,7 +17,7 @@ services:
   rest:
     build: ./rest
     ports:
-      - 5001:5001
+      - 5002:5001
     volumes:
       - ./rest:/app # for debug mode - not neccessary for production
       - postgres_binary:/var/lib/postgres_binary
@@ -30,6 +30,26 @@ services:
     restart: always
     depends_on:
         - postgres
+
+  paraview:
+    build: ./paraview
+    volumes:
+      - ./paraview:/opt/paraview/app
+    ports:
+        - 1234:1234
+    environment:
+      - PROTOCOL="ws"
+    restart: always
+
+  vue:
+    build: ./vue
+    ports:
+      - 8080:8080
+    volumes:
+      - ./vue:/app
+    restart: always
+    depends_on:
+      - paraview
 
 volumes:
   postgres:
