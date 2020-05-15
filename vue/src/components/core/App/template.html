@@ -17,16 +17,12 @@
   </v-toolbar>
 
   <v-content :class="$style.appContent">
-    <remote-rendering-view :client="client" />
+    <!-- <remote-rendering-view :client="client" /> -->
     <vtk-view ref="vtkViewComponent" />
   </v-content>
 
   <v-content :class="$style.appContent">
-    <!-- <code-editor
-      editor-id="Python3 editor"
-      :content="import krak"
-      @change-content="update_editor"
-    /> -->
+    <code-editor />
     <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
     <!-- <remote-rendering-view :client="client" />
     <vtk-view ref="vtkViewComponent" /> -->

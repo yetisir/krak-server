@@ -2,6 +2,7 @@ import logo from '@/assets/logo.png';
 import VtkView from '@/components/widgets/VtkView';
 import RemoteRenderingView from '@/components/widgets/RemoteRenderingView';
 import ProgressBar from '@/components/widgets/ProgressBar';
+import CodeEditor from '@/components/widgets/CodeEditor';
 
 import { Mutations, Actions } from '@/store/TYPES';
 
@@ -15,6 +16,7 @@ export default {
     VtkView,
     RemoteRenderingView,
     ProgressBar,
+    CodeEditor,
   },
   data() {
     return {
@@ -58,6 +60,7 @@ export default {
     resetCamera() {
       this.$store.dispatch(Actions.CONE_RESET_CAMERA);
     },
+    update_editor() {},
   },
   mounted() {
     // Register view to the store

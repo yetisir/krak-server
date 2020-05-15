@@ -231,7 +231,7 @@ export default {
         interactor.onStartAnimation(viewStream.startInteraction);
         interactor.onEndAnimation(viewStream.endInteraction);
 
-        view.onResize(viewStream.render());
+        view.onResize(viewStream.render);
       }
     },
   },
