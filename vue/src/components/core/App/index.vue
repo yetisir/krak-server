@@ -1,3 +1,3 @@
-<template src="@app/components/core/App/template.html" />
-<style module src="@app/components/core/App/style.css" />
-<script src="@app/components/core/App/script.js" />
+<template src="@/components/core/App/template.html" />
+<style module src="@/components/core/App/style.css" />
+<script src="@/components/core/App/script.js" />

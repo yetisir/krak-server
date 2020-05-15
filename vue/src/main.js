@@ -6,8 +6,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify';
 
-import App from '@app/components/core/App';
-import store from '@app/store';
+import App from '@/components/core/App';
+import store from '@/store';
 
 /* eslint-disable-next-line import/extensions */
 import 'typeface-roboto';

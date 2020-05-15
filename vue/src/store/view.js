@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Actions, Mutations } from '@app/store/TYPES';
+import { Actions, Mutations } from '@/store/TYPES';
 
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
 import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';

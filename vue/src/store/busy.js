@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Mutations } from '@app/store/TYPES';
+import { Mutations } from '@/store/TYPES';
 
 export default {
   state: {

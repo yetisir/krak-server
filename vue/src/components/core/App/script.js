@@ -1,9 +1,9 @@
-import logo from '@app/assets/logo.png';
-import VtkView from '@app/components/widgets/VtkView';
-import RemoteRenderingView from '@app/components/widgets/RemoteRenderingView';
-import ProgressBar from '@app/components/widgets/ProgressBar';
+import logo from '@/assets/logo.png';
+import VtkView from '@/components/widgets/VtkView';
+import RemoteRenderingView from '@/components/widgets/RemoteRenderingView';
+import ProgressBar from '@/components/widgets/ProgressBar';
 
-import { Mutations, Actions } from '@app/store/TYPES';
+import { Mutations, Actions } from '@/store/TYPES';
 
 // ----------------------------------------------------------------------------
 // Component API

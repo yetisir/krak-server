@@ -1,10 +1,10 @@
 // import Vue from 'vue';
 import Vuex from 'vuex';
 
-import busy from '@app/store/busy';
-import cone from '@app/store/cone';
-import network from '@app/store/network';
-import view from '@app/store/view';
+import busy from '@/store/busy';
+import cone from '@/store/cone';
+import network from '@/store/network';
+import view from '@/store/view';
 
 /* eslint-enable no-param-reassign */
 

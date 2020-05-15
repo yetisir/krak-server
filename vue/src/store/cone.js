@@ -1,4 +1,4 @@
-import { Actions, Mutations } from '@app/store/TYPES';
+import { Actions, Mutations } from '@/store/TYPES';
 
 export default {
   state: {
