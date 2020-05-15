@@ -36,14 +36,14 @@ export default {
     busyPercent() {
       return this.$store.getters.BUSY_PROGRESS;
     },
-    resolution: {
-      get() {
-        return this.$store.getters.CONE_RESOLUTION;
-      },
-      set(value) {
-        this.$store.dispatch(Actions.CONE_UPDATE_RESOLUTION, Number(value));
-      },
-    },
+    // resolution: {
+    //   get() {
+    //     return this.$store.getters.CONE_RESOLUTION;
+    //   },
+    //   set(value) {
+    //     this.$store.dispatch(Actions.CONE_UPDATE_RESOLUTION, Number(value));
+    //   },
+    // },
   },
   watch: {
     client() {

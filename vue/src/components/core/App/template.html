@@ -1,33 +1,34 @@
 <v-app :dark="darkMode">
-  <v-toolbar
-    clipped-left
-    app
-  >
-    <img
-      :src="logo"
-      :class="$style.logo"
-      v-on:click="resetCamera()"
-    />
+  <progress-bar :progress="busyPercent" />
+  <v-toolbar clipped-left app>
+    <img :src="logo" :class="$style.logo" @click="resetCamera()" />
     <span class="title">Krak</span>
     <v-spacer />
-    <progress-bar :progress="busyPercent" />
-    <v-slider
+    <!-- <v-slider
       :class="$style.slider"
       hide-details
       v-model="resolution"
       :max="60"
       :min="3"
       :step="1"
-    />
-    <v-switch
-      :class="$style.switch"
-      hide-details
-      v-model="darkMode"
-    />
+    /> -->
+    <!-- <v-spacer /> -->
+    <v-switch :class="$style.switch" hide-details v-model="darkMode" />
   </v-toolbar>
 
   <v-content :class="$style.appContent">
-    <!-- <remote-rendering-view :client="client" /> -->
-    <vtk-view ref="vtkViewComponent"/>
+    <remote-rendering-view :client="client" />
+    <vtk-view ref="vtkViewComponent" />
+  </v-content>
+
+  <v-content :class="$style.appContent">
+    <!-- <code-editor
+      editor-id="Python3 editor"
+      :content="import krak"
+      @change-content="update_editor"
+    /> -->
+    <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
+    <!-- <remote-rendering-view :client="client" />
+    <vtk-view ref="vtkViewComponent" /> -->
   </v-content>
 </v-app>

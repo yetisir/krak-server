@@ -11,7 +11,7 @@ import view from '@/store/view';
 function createStore() {
   return new Vuex.Store({
     state: {
-      dark: false,
+      dark: true,
     },
     modules: {
       busy,
