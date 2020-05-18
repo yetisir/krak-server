@@ -7,7 +7,7 @@ export default {
   mounted() {
     this.aceEditor = ace.edit(this.$refs.ace, {
       maxLines: 60,
-      minLines: 10,
+      minLines: 20,
       fontSize: 14,
       theme: this.themePath,
       mode: this.modePath,

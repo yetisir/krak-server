@@ -69,4 +69,7 @@ export default {
     window.removeEventListener('resize', this.view.resize);
     this.view.delete();
   },
+  updated() {
+    this.$store.dispatch('VIEW_UPDATE_RESIZE');
+  },
 };

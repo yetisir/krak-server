@@ -6,9 +6,16 @@ export default {
         width: 200,
         borderSize: 3,
       },
+      right: true,
+      permanent: true,
+      expandOnHover: true,
+      dark: true,
     };
   },
   methods: {
+    triggerResize() {
+      window.dispatchEvent(new Event('resize'));
+    },
     setBorderWidth() {
       let border = this.$refs.drawer.$el.querySelector(
         '.v-navigation-drawer__border'
@@ -16,42 +23,43 @@ export default {
       border.style.width = this.navigation.borderSize + 'px';
       border.style.cursor = 'ew-resize';
     },
+    resize(event) {
+      document.body.style.cursor = 'ew-resize';
+      this.$refs.drawer.$el.style.width =
+        document.body.scrollWidth - event.clientX + 'px';
+      this.navigation.width = this.$refs.drawer.$el.style.width;
+      // this.triggerResize();
+    },
     setEvents() {
-      const drawer = this.$refs.drawer.$el;
-      const drawerBorder = drawer.querySelector('.v-navigation-drawer__border');
-
-      function resize(e) {
-        document.body.style.cursor = 'ew-resize';
-        drawer.style.width = document.body.scrollWidth - e.clientX + 'px';
-      }
+      const drawerBorder = this.$refs.drawer.$el.querySelector(
+        '.v-navigation-drawer__border'
+      );
 
       drawerBorder.addEventListener(
         'mousedown',
         (e) => {
           if (e.offsetX < this.navigation.borderSize) {
-            drawer.style.transition = 'initial';
-            document.addEventListener('mousemove', resize, false);
+            // this.$refs.drawer.$el.style.transition = '';
+            document.addEventListener('mousemove', this.resize, false);
           }
         },
         false
       );
 
-      drawerBorder.addEventListener(
+      document.addEventListener(
         'mouseup',
         () => {
-          drawer.style.transition = '';
-          this.navigation.width = drawer.style.width;
+          this.triggerResize();
+          this.$refs.drawer.$el.style.transition = '';
+          this.navigation.width = this.$refs.drawer.$el.style.width;
           document.body.style.cursor = '';
-          document.removeEventListener('mousemove', resize, false);
-          this.updateView();
+          document.removeEventListener('mousemove', this.resize, false);
         },
         false
       );
     },
-    updateView() {
-      this.$store.dispatch('VIEW_UPDATE_CAMERA');
-    },
   },
+
   mounted() {
     this.setBorderWidth();
     this.setEvents();
