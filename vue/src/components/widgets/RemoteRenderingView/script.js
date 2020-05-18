@@ -26,11 +26,11 @@ export default {
       this.view.setInteractiveRatio(1);
     }
   },
-  // mounted() {
-  //   this.view.setContainer(this.$el);
-  //   window.addEventListener('resize', this.view.resize);
-  //   this.connect();
-  // },
+  mounted() {
+    this.view.setContainer(this.$el);
+    window.addEventListener('resize', this.view.resize);
+    this.connect();
+  },
   methods: {
     connect() {
       if (this.client) {

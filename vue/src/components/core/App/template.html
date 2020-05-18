@@ -16,6 +16,8 @@
     <v-switch :class="$style.switch" hide-details v-model="darkMode" />
   </v-toolbar>
 
+  <navigation-drawer />
+
   <v-content :class="$style.appContent">
     <!-- <remote-rendering-view :client="client" /> -->
     <vtk-view ref="vtkViewComponent" />

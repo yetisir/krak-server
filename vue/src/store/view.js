@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { Actions, Mutations } from '@/store/TYPES';
 
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
 import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
 import vtkPolyData from 'vtk.js/Sources/Common/DataModel/PolyData';
+import vtkViewProxy from 'vtk.js/Sources/Proxy/Core/ViewProxy';
 
 const ROTATION_STEP = 2;
 const VIEW_UPS = [[0, 1, 0], [0, 0, 1], [0, 1, 0]];

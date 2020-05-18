@@ -1,0 +1,21 @@
+<v-navigation-drawer ref="drawer" app right :width="navigation.width" permanent>
+  <v-toolbar>
+    <v-toolbar-title class="headline text-uppercase">
+      <span>Details</span>
+    </v-toolbar-title>
+  </v-toolbar>
+  <v-tabs>
+    <v-tab>Editor</v-tab>
+    <v-tab-item>
+      <v-card flat>
+        <v-card-text>Editor Details</v-card-text>
+      </v-card>
+    </v-tab-item>
+    <v-tab>Scene</v-tab>
+    <v-tab-item>
+      <v-card flat>
+        <v-card-text>Scene Details</v-card-text>
+      </v-card>
+    </v-tab-item>
+  </v-tabs>
+</v-navigation-drawer>

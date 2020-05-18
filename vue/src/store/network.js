@@ -3,8 +3,6 @@ import SmartConnect from 'wslink/src/SmartConnect';
 
 import coneProtocol from '@/io/protocol';
 
-import { Mutations } from '@/store/TYPES';
-
 // Bind vtkWSLinkClient to our SmartConnect
 vtkWSLinkClient.setSmartConnectClass(SmartConnect);
 
@@ -45,7 +43,7 @@ export default {
 
       // Connect to busy store
       clientToConnect.onBusyChange((count) => {
-        commit(Mutations.BUSY_COUNT_SET, count);
+        commit('BUSY_COUNT_SET', count);
       });
       clientToConnect.beginBusy();
 
@@ -71,7 +69,7 @@ export default {
       clientToConnect
         .connect(config)
         .then((validClient) => {
-          commit(Mutations.NETWORK_CLIENT_SET, validClient);
+          commit('NETWORK_CLIENT_SET', validClient);
           clientToConnect.endBusy();
         })
         .catch((error) => {
