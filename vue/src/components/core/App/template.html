@@ -18,15 +18,14 @@
 
   <navigation-drawer />
 
-  <v-content :class="$style.appContent">
-    <!-- <remote-rendering-view :client="client" /> -->
+  <!-- <remote-rendering-view :client="client" /> -->
+  <v-content>
     <vtk-view ref="vtkViewComponent" />
-  </v-content>
 
-  <v-content :class="$style.appContent">
     <code-editor />
-    <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
-    <!-- <remote-rendering-view :client="client" />
-    <vtk-view ref="vtkViewComponent" /> -->
   </v-content>
+  <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
+  <!-- <remote-rendering-view :client="client" />
+    <vtk-view ref="vtkViewComponent" /> -->
+  <!-- </v-content> -->
 </v-app>

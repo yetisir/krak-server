@@ -13,6 +13,12 @@ export default {
   //   },
   // },
   actions: {
+    CONE_RUN_CODE({ rootState }, text) {
+      const client = rootState.network.client;
+      if (client) {
+        client.getRemote().Cone.runCode(text);
+      }
+    },
     CONE_INITIALIZE({ rootState, dispatch }) {
       const client = rootState.network.client;
       if (client) {

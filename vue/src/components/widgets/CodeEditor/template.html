@@ -1,3 +1,12 @@
-<div class="ace-container">
-  <div class="ace-editor" ref="ace"></div>
-</div>
+<v-container>
+  <link
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+    rel="stylesheet"
+  />
+  <div class="ace-container">
+    <div class="ace-editor" ref="ace"></div>
+  </div>
+  <v-btn fab small absolute color="green" @click="runCode">
+    <v-icon color="white">mdi-play</v-icon>
+  </v-btn>
+</v-container>

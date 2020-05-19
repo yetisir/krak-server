@@ -41,6 +41,12 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
         # simple.Show(sphere)
         return self.resetCamera()
 
+    @exportRpc("code.run")
+    def runCode(self, text):
+        log.warn(text)
+        f = exec(text)
+        log.warn(f)
+
     @exportRpc("vtk.data.add_sphere")
     def addSphere(self, **kwargs):
         log.warn(kwargs)
