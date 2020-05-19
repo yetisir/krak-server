@@ -26,11 +26,6 @@ r"""
 import os
 import sys
 
-# Try handle virtual env if provided
-if '--virtual-env' in sys.argv:
-  virtualEnvPath = sys.argv[sys.argv.index('--virtual-env') + 1]
-  virtualEnv = virtualEnvPath + '/bin/activate_this.py'
-  execfile(virtualEnv, dict(__file__=virtualEnv))
 
 # import paraview modules.
 from paraview.web import pv_wslink
@@ -50,36 +45,42 @@ import argparse
 # Create custom Pipeline Manager class to handle clients requests
 # =============================================================================
 
+
 class _Server(pv_wslink.PVServerProtocol):
 
     authKey = "wslink-secret"
-    viewportScale=1.0
-    viewportMaxWidth=2560
-    viewportMaxHeight=1440
+    viewportScale = 1.0
+    viewportMaxWidth = 2560
+    viewportMaxHeight = 1440
     settingsLODThreshold = 102400
 
     @staticmethod
     def add_arguments(parser):
-        parser.add_argument("--virtual-env", default=None, help="Path to virtual environment to use")
-        parser.add_argument("--viewport-scale", default=1.0, type=float, help="Viewport scaling factor", dest="viewportScale")
-        parser.add_argument("--viewport-max-width", default=2560, type=int, help="Viewport maximum size in width", dest="viewportMaxWidth")
-        parser.add_argument("--viewport-max-height", default=1440, type=int, help="Viewport maximum size in height", dest="viewportMaxHeight")
-        parser.add_argument("--settings-lod-threshold", default=102400, type=int, help="LOD Threshold in Megabytes", dest="settingsLODThreshold")
-
+        parser.add_argument("--virtual-env", default=None,
+                            help="Path to virtual environment to use")
+        parser.add_argument("--viewport-scale", default=1.0, type=float,
+                            help="Viewport scaling factor", dest="viewportScale")
+        parser.add_argument("--viewport-max-width", default=2560, type=int,
+                            help="Viewport maximum size in width", dest="viewportMaxWidth")
+        parser.add_argument("--viewport-max-height", default=1440, type=int,
+                            help="Viewport maximum size in height", dest="viewportMaxHeight")
+        parser.add_argument("--settings-lod-threshold", default=102400, type=int,
+                            help="LOD Threshold in Megabytes", dest="settingsLODThreshold")
 
     @staticmethod
     def configure(args):
-        _Server.authKey              = args.authKey
-        _Server.viewportScale        = args.viewportScale
-        _Server.viewportMaxWidth     = args.viewportMaxWidth
-        _Server.viewportMaxHeight    = args.viewportMaxHeight
+        _Server.authKey = args.authKey
+        _Server.viewportScale = args.viewportScale
+        _Server.viewportMaxWidth = args.viewportMaxWidth
+        _Server.viewportMaxHeight = args.viewportMaxHeight
         _Server.settingsLODThreshold = args.settingsLODThreshold
-
 
     def initialize(self):
         # Bring used components from ParaView
-        self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPort(_Server.viewportScale, _Server.viewportMaxWidth, _Server.viewportMaxHeight))
-        self.registerVtkWebProtocol(pv_protocols.ParaViewWebPublishImageDelivery(decode=False))
+        self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPort(
+            _Server.viewportScale, _Server.viewportMaxWidth, _Server.viewportMaxHeight))
+        self.registerVtkWebProtocol(
+            pv_protocols.ParaViewWebPublishImageDelivery(decode=False))
 
         # Bring used components from ParaView Lite
         self.registerVtkWebProtocol(local_protocol.ParaViewCone())
@@ -100,8 +101,10 @@ class _Server(pv_wslink.PVServerProtocol):
         pxm = simple.servermanager.ProxyManager()
 
         # Update interaction mode
-        interactionProxy = pxm.GetProxy('settings', 'RenderViewInteractionSettings')
-        interactionProxy.Camera3DManipulators = ['Rotate', 'Pan', 'Zoom', 'Pan', 'Roll', 'Pan', 'Zoom', 'Rotate', 'Zoom']
+        interactionProxy = pxm.GetProxy(
+            'settings', 'RenderViewInteractionSettings')
+        interactionProxy.Camera3DManipulators = [
+            'Rotate', 'Pan', 'Zoom', 'Pan', 'Roll', 'Pan', 'Zoom', 'Rotate', 'Zoom']
 
         # Custom rendering settings
         renderingSettings = pxm.GetProxy('settings', 'RenderViewSettings')
@@ -114,7 +117,8 @@ class _Server(pv_wslink.PVServerProtocol):
 
 if __name__ == "__main__":
     # Create argument parser
-    parser = argparse.ArgumentParser(description="ParaView Cone Sample application")
+    parser = argparse.ArgumentParser(
+        description="ParaView Cone Sample application")
 
     # Add arguments
     server.add_arguments(parser)

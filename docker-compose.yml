@@ -1,42 +1,42 @@
-version: '3'
+version: "3"
 
 services:
-  postgres:
-    build: ./postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres:/var/lib/postgres
-      - postgres_binary:/var/lib/postgres_binary
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: borehole_database
-    restart: always
+  #   postgres:
+  #     build: ./postgres
+  #     ports:
+  #       - 5432:5432
+  #     volumes:
+  #       - postgres:/var/lib/postgres
+  #       - postgres_binary:/var/lib/postgres_binary
+  #     environment:
+  #       POSTGRES_USER: admin
+  #       POSTGRES_PASSWORD: admin
+  #       POSTGRES_DB: borehole_database
+  #     restart: always
 
-  rest:
-    build: ./rest
-    ports:
-      - 5002:5001
-    volumes:
-      - ./rest:/app # for debug mode - not neccessary for production
-      - postgres_binary:/var/lib/postgres_binary
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: borehole_database
-      POSTGRES_PORT: 5432
-      POSTGRES_HOST: postgres
-    restart: always
-    depends_on:
-        - postgres
+  # rest:
+  #   build: ./rest
+  #   ports:
+  #     - 5001:5001
+  #   volumes:
+  #     - ./rest:/app # for debug mode - not neccessary for production
+  #     - postgres_binary:/var/lib/postgres_binary
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: borehole_database
+  #     POSTGRES_PORT: 5432
+  #     POSTGRES_HOST: postgres
+  #   restart: always
+  #   depends_on:
+  #       - postgres
 
   paraview:
     build: ./paraview
     volumes:
       - ./paraview:/opt/paraview/app
     ports:
-        - 1234:1234
+      - 1234:1234
     environment:
       - PROTOCOL="ws"
     restart: always
