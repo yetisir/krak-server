@@ -24,8 +24,12 @@ class ParaViewCone(protocols.ParaViewWebProtocol):
     @register("code.run")
     def runCode(self, text):
         log.warn(text)
-        f = exec(text)
-        log.warn(f)
+        for source in simple.GetSources().values():
+            simple.Hide(source)
+        simple.ResetSession()
+
+        # temporary highly insecure
+        exec(text)
 
     @register("vtk.data.add_sphere")
     def addSphere(self, **kwargs):
