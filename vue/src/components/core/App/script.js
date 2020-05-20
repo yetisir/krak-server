@@ -4,6 +4,7 @@ import RemoteRenderingView from '@/components/widgets/RemoteRenderingView';
 import ProgressBar from '@/components/widgets/ProgressBar';
 import NavigationDrawer from '@/components/widgets/NavigationDrawer';
 import CodeEditor from '@/components/widgets/CodeEditor';
+import Console from '@/components/widgets/Console';
 
 // ----------------------------------------------------------------------------
 // Component API
@@ -17,6 +18,7 @@ export default {
     ProgressBar,
     NavigationDrawer,
     CodeEditor,
+    Console,
   },
   data() {
     return {

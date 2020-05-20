@@ -25,68 +25,52 @@ r"""
 # import to process args
 import os
 import sys
-
-
-# import paraview modules.
-from paraview.web import pv_wslink
-from paraview.web import protocols as pv_protocols
-
-# import RPC annotation
-from wslink import register as exportRpc
+import argparse
 
 from paraview import simple
+from paraview.web import pv_wslink
+from paraview.web import protocols
+
+# import RPC annotation
+from wslink import register
 from wslink import server
 
-import pv_protocol as local_protocol
+import pv_protocol
 
-import argparse
+# import argparse
 
 # =============================================================================
 # Create custom Pipeline Manager class to handle clients requests
 # =============================================================================
 
 
-class _Server(pv_wslink.PVServerProtocol):
-
-    authKey = "wslink-secret"
-    viewportScale = 1.0
-    viewportMaxWidth = 2560
-    viewportMaxHeight = 1440
-    settingsLODThreshold = 102400
+class Server(pv_wslink.PVServerProtocol):
 
     @staticmethod
-    def add_arguments(parser):
-        parser.add_argument("--virtual-env", default=None,
-                            help="Path to virtual environment to use")
-        parser.add_argument("--viewport-scale", default=1.0, type=float,
-                            help="Viewport scaling factor", dest="viewportScale")
-        parser.add_argument("--viewport-max-width", default=2560, type=int,
-                            help="Viewport maximum size in width", dest="viewportMaxWidth")
-        parser.add_argument("--viewport-max-height", default=1440, type=int,
-                            help="Viewport maximum size in height", dest="viewportMaxHeight")
-        parser.add_argument("--settings-lod-threshold", default=102400, type=int,
-                            help="LOD Threshold in Megabytes", dest="settingsLODThreshold")
-
-    @staticmethod
-    def configure(args):
-        _Server.authKey = args.authKey
-        _Server.viewportScale = args.viewportScale
-        _Server.viewportMaxWidth = args.viewportMaxWidth
-        _Server.viewportMaxHeight = args.viewportMaxHeight
-        _Server.settingsLODThreshold = args.settingsLODThreshold
+    def configure(settings):
+        Server.authKey = settings.authKey
+        Server.viewportScale = settings.viewportScale
+        Server.viewportMaxWidth = settings.viewportMaxWidth
+        Server.viewportMaxHeight = settings.viewportMaxHeight
+        Server.settingsLODThreshold = settings.settingsLODThreshold
 
     def initialize(self):
         # Bring used components from ParaView
-        self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPort(
-            _Server.viewportScale, _Server.viewportMaxWidth, _Server.viewportMaxHeight))
         self.registerVtkWebProtocol(
-            pv_protocols.ParaViewWebPublishImageDelivery(decode=False))
+            protocols.ParaViewWebViewPort(
+                Server.viewportScale,
+                Server.viewportMaxWidth,
+                Server.viewportMaxHeight,
+            ))
+        self.registerVtkWebProtocol(
+            protocols.ParaViewWebPublishImageDelivery(decode=False))
 
         # Bring used components from ParaView Lite
-        self.registerVtkWebProtocol(local_protocol.ParaViewCone())
+        self.registerVtkWebProtocol(
+            pv_protocol.ParaViewCone())
 
         # Update authentication key to use
-        self.updateSecret(_Server.authKey)
+        self.updateSecret(Server.authKey)
 
         # tell the C++ web app to use no encoding. ParaViewWebPublishImageDelivery must be set to decode=False to match.
         self.getApplication().SetImageEncoding(0)
@@ -108,23 +92,34 @@ class _Server(pv_wslink.PVServerProtocol):
 
         # Custom rendering settings
         renderingSettings = pxm.GetProxy('settings', 'RenderViewSettings')
-        renderingSettings.LODThreshold = _Server.settingsLODThreshold
+        renderingSettings.LODThreshold = Server.settingsLODThreshold
 
-
-# =============================================================================
-# Main: Parse args and start server
-# =============================================================================
 
 if __name__ == "__main__":
     # Create argument parser
     parser = argparse.ArgumentParser(
         description="ParaView Cone Sample application")
+    parser.add_argument(
+        "--virtual-env", default=None,
+        help="Path to virtual environment to use")
+    parser.add_argument(
+        "--viewport-scale", default=1.0, type=float,
+        help="Viewport scaling factor", dest="viewportScale")
+    parser.add_argument(
+        "--viewport-max-width", default=2560, type=int,
+        help="Viewport maximum size in width", dest="viewportMaxWidth")
+    parser.add_argument(
+        "--viewport-max-height", default=1440, type=int,
+        help="Viewport maximum size in height", dest="viewportMaxHeight")
+    parser.add_argument(
+        "--settings-lod-threshold", default=102400, type=int,
+        help="LOD Threshold in Megabytes", dest="settingsLODThreshold")
 
-    # Add arguments
+    # # Add arguments
     server.add_arguments(parser)
-    _Server.add_arguments(parser)
+
     args = parser.parse_args()
-    _Server.configure(args)
+    Server.configure(args)
 
     # Start server
-    server.start_webserver(options=args, protocol=_Server)
+    server.start_webserver(options=args, protocol=Server)

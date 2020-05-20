@@ -1,18 +1,18 @@
 version: "3"
 
 services:
-  #   postgres:
-  #     build: ./postgres
-  #     ports:
-  #       - 5432:5432
-  #     volumes:
-  #       - postgres:/var/lib/postgres
-  #       - postgres_binary:/var/lib/postgres_binary
-  #     environment:
-  #       POSTGRES_USER: admin
-  #       POSTGRES_PASSWORD: admin
-  #       POSTGRES_DB: borehole_database
-  #     restart: always
+  postgres:
+    build: ./postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgres
+      - postgres_binary:/var/lib/postgres_binary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: borehole_database
+    restart: always
 
   # rest:
   #   build: ./rest
@@ -40,6 +40,8 @@ services:
     environment:
       - PROTOCOL="ws"
     restart: always
+    depends_on:
+      - sandbox
 
   vue:
     build: ./vue
@@ -50,6 +52,12 @@ services:
     restart: always
     depends_on:
       - paraview
+
+  sandbox:
+    build: ./sandbox
+    ports:
+      - 5550:5550
+    tty: true
 
 volumes:
   postgres:

@@ -1,63 +1,43 @@
 import sys
-from paraview.modules.vtkRemotingViews import vtkPVRenderView
-from paraview.web import protocols as pv_protocols
-from paraview import simple
-from wslink import register as exportRpc
 import os
 import time
 import logging
 
-# from twisted.logger import Logger
+# from paraview.modules.vtkRemotingViews import vtkPVRenderView
+from paraview.web import protocols
+from paraview import simple
+from wslink import register
+
 log = logging.Logger('default')
 log.setLevel(logging.DEBUG)
 log.info('testing')
 
-sphere = simple.Sphere()
-cone = simple.Cone()
 
+class ParaViewCone(protocols.ParaViewWebProtocol):
 
-class ParaViewCone(pv_protocols.ParaViewWebProtocol):
-
-    def getCamera(self):
-        view = self.getView('-1')
-        bounds = [-1, 1, -1, 1, -1, 1]
-
-        if view and view.GetClientSideView().GetClassName() == 'vtkPVRenderView':
-            rr = view.GetClientSideView().GetRenderer()
-            bounds = rr.ComputeVisiblePropBounds()
-
-        return {
-            'id': view.GetGlobalIDAsString(),
-            'bounds': bounds,
-            'position': tuple(view.CameraPosition),
-            'viewUp': tuple(view.CameraViewUp),
-            'focalPoint': tuple(view.CameraFocalPoint),
-            'centerOfRotation': tuple(view.CenterOfRotation),
-        }
-
-    @exportRpc("vtk.initialize")
+    @register("vtk.initialize")
     def createVisualization(self):
         # simple.Show(cone)
         # simple.Show(sphere)
         return self.resetCamera()
 
-    @exportRpc("code.run")
+    @register("code.run")
     def runCode(self, text):
         log.warn(text)
         f = exec(text)
         log.warn(f)
 
-    @exportRpc("vtk.data.add_sphere")
+    @register("vtk.data.add_sphere")
     def addSphere(self, **kwargs):
         log.warn(kwargs)
         simple.Show(simple.Sphere(**kwargs))
 
-    @exportRpc("vtk.data.add_cone")
+    @register("vtk.data.add_cone")
     def addCone(self, **kwargs):
         log.warn(kwargs)
         simple.Show(simple.Cone(**kwargs))
 
-    @exportRpc("vtk.camera.reset")
+    @register("vtk.camera.reset")
     def resetCamera(self):
         view = self.getView('-1')
         simple.Render(view)
@@ -72,12 +52,12 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
 
         return self.getCamera()
 
-    # @exportRpc("vtk.cone.resolution.update")
+    # @register("vtk.cone.resolution.update")
     # def updateResolution(self, resolution):
     #     cone.Resolution = resolution
     #     self.getApplication().InvokeEvent('UpdateEvent')
 
-    @exportRpc("viewport.mouse.zoom.wheel")
+    @register("viewport.mouse.zoom.wheel")
     def updateZoomFromWheel(self, event):
         if 'Start' in event["type"]:
             self.getApplication().InvokeEvent('StartInteractionEvent')
@@ -110,3 +90,20 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
 
         if 'End' in event["type"]:
             self.getApplication().InvokeEvent('EndInteractionEvent')
+
+    def getCamera(self):
+        view = self.getView('-1')
+        bounds = [-1, 1, -1, 1, -1, 1]
+
+        if view and view.GetClientSideView().GetClassName() == 'vtkPVRenderView':
+            rr = view.GetClientSideView().GetRenderer()
+            bounds = rr.ComputeVisiblePropBounds()
+
+        return {
+            'id': view.GetGlobalIDAsString(),
+            'bounds': bounds,
+            'position': tuple(view.CameraPosition),
+            'viewUp': tuple(view.CameraViewUp),
+            'focalPoint': tuple(view.CameraFocalPoint),
+            'centerOfRotation': tuple(view.CenterOfRotation),
+        }

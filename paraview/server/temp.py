@@ -1,23 +1,22 @@
-import krak
+import argparse
+import zmq
+import time
 
-krak.Sphere()
-krak.Sphere(center=(0, 0, 1))
-krak.Cone(center=(0, 1, 0))
-# async def hello():
-#     uri = 'ws://0.0.0.0:1234/ws'
-#     async with websockets.connect(uri) as websocket:
 
-#         args = {
-#             "wslink": "1.0",
-#             "id": "12345678",
-#             "method": "vtk.camera.reset",
-#             "args": [],
-#             "kwags": {},
-#             }
+def publisher(ip="0.0.0.0", port=5550):
+    # ZMQ connection
+    url = f"tcp://{ip}:{port}"
+    print("Going to connect to: {}".format(url))
+    ctx = zmq.Context()
+    socket = ctx.socket(zmq.PUB)
+    socket.connect(url)  # publisher connects to subscriber
+    print("Pub connected to: {}\nSending data...".format(url))
 
-#         await websocket.send(json.dumps(args))
+    topic = 'foo'.encode('ascii')
+    msg = 'test '.encode('ascii')
+    # publish data
+    socket.send_multipart([topic, msg])  # 'test'.format(i)
+    print("On topic {}, send data: {}".format(topic, msg))
 
-#         response = await websocket.recv()
-#         print(response)
 
-# asyncio.get_event_loop().run_until_complete(hello())
+publisher()

@@ -21,8 +21,20 @@
   <!-- <remote-rendering-view :client="client" /> -->
   <v-content>
     <vtk-view ref="vtkViewComponent" />
-
-    <code-editor />
+    <v-tabs>
+      <v-tab>Editor</v-tab>
+      <v-tab-item>
+        <v-card flat>
+          <code-editor />
+        </v-card>
+      </v-tab-item>
+      <v-tab>Console</v-tab>
+      <v-tab-item>
+        <v-card flat>
+          <console />
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
   </v-content>
   <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
   <!-- <remote-rendering-view :client="client" />

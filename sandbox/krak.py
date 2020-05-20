@@ -1,24 +1,41 @@
-import websocket
+from abc import ABC, abstractmethod
 import json
 import random
 
+import websocket
 
-class KrakObject:
-    objects = []
-    uri = 'ws://0.0.0.0:1234/ws'
+uri = 'ws://0.0.0.0:1234/ws'
 
-    websocket_connection = websocket.create_connection(uri)
 
-    def __init__(self):
+class KrakObject(ABC):
 
-        self.objects.append(self)
+    def __init__(self, scene=None):
+        self.websocket_connection = websocket.create_connection(uri)
         self._send()
+        pass
 
     def _send(self):
-        self.websocket_connection.send(json.dumps(self.data))
+        data = {
+            'wslink': '1.0',
+            'id': str(random.random()),
+            'method': self.method,
+            'args': [],
+            'kwargs': self.kwargs}
+
+        self.websocket_connection.send(json.dumps(data))
 
     def __del__(self):
         self.websocket_connection.close()
+
+    # @property
+    # @abstractmethod
+    # def method(self):
+    #     raise NotImplementedError
+
+    # @property
+    # @abstractmethod
+    # def kwargs(self):
+    #     raise NotImplementedError
 
 
 class Sphere(KrakObject):
@@ -26,16 +43,12 @@ class Sphere(KrakObject):
         self.center = center
         self.radius = radius
 
-        self.data = {
-            'wslink': '1.0',
-            'id': str(random.random()),
-            'method': 'vtk.data.add_sphere',
-            'args': [],
-            'kwargs': {
-                'Center': self.center,
-                'Radius': self.radius,
-            }
+        self.method = 'vtk.data.add_sphere'
+        self.kwargs = {
+            'Center': self.center,
+            'Radius': self.radius,
         }
+
         super().__init__()
 
 
@@ -45,15 +58,12 @@ class Cone(KrakObject):
         self.radius = radius
         self.height = height
 
-        self.data = {
-            'wslink': '1.0',
-            'id': str(random.random()),
-            'method': 'vtk.data.add_cone',
-            'args': [],
-            'kwargs': {
-                'Center': self.center,
-                'Radius': self.radius,
-                'Height': self.height,
-            }
+        self.method = 'vtk.data.add_cone'
+
+        self.kwargs = {
+            'Center': self.center,
+            'Radius': self.radius,
+            'Height': self.height,
         }
+
         super().__init__()
