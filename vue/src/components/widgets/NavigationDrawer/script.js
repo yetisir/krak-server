@@ -1,3 +1,5 @@
+import { mapState } from 'vuex';
+
 export default {
   name: 'NavigationDrawer',
   data: () => {
@@ -10,8 +12,15 @@ export default {
       permanent: true,
       expandOnHover: true,
       dark: true,
+      // objects: { id: 2 },
     };
   },
+  computed: mapState({
+    objects: (state) => state.cone.objects,
+  }),
+  // objects() {
+  //   return this.$store.getters.CONE_OBJECTS;
+  // },
   methods: {
     triggerResize() {
       window.dispatchEvent(new Event('resize'));
@@ -31,11 +40,11 @@ export default {
       // this.triggerResize();
     },
     setEvents() {
-      const drawerBorder = this.$refs.drawer.$el.querySelector(
-        '.v-navigation-drawer__border'
-      );
+      // const drawerBorder = this.$refs.drawer.$el.querySelector(
+      //   '.v-navigation-drawer__border'
+      // );
 
-      drawerBorder.addEventListener(
+      document.addEventListener(
         'mousedown',
         (e) => {
           if (e.offsetX < this.navigation.borderSize) {
@@ -49,11 +58,12 @@ export default {
       document.addEventListener(
         'mouseup',
         () => {
-          this.triggerResize();
-          this.$refs.drawer.$el.style.transition = '';
-          this.navigation.width = this.$refs.drawer.$el.style.width;
-          document.body.style.cursor = '';
           document.removeEventListener('mousemove', this.resize, false);
+          this.triggerResize();
+          // this.$refs.drawer.$el.style.transition = '';
+          // this.navigation.width = this.$refs.drawer.$el.style.width;
+          document.body.style.cursor = '';
+          this.$store.dispatch('CONE_UPDATE_OBJECTS');
         },
         false
       );

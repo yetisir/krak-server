@@ -8,6 +8,8 @@ from paraview.web import protocols
 from paraview import simple
 from wslink import register
 
+import krak
+
 log = logging.Logger('default')
 log.setLevel(logging.DEBUG)
 log.info('testing')
@@ -29,17 +31,30 @@ class ParaViewCone(protocols.ParaViewWebProtocol):
         simple.ResetSession()
 
         # temporary highly insecure
+        krak.object_registry = {}
+
         exec(text)
 
-    @register("vtk.data.add_sphere")
-    def addSphere(self, **kwargs):
-        log.warn(kwargs)
-        simple.Show(simple.Sphere(**kwargs))
+    @register('data.objects')
+    def getKrakObjects(self):
+        objects = []
+        for obj in krak.object_registry.values():
+            objects.append({
+                'type': obj.type,
+                'kwargs': obj.kwargs,
+            })
+        log.warn(objects)
+        return objects
 
-    @register("vtk.data.add_cone")
-    def addCone(self, **kwargs):
-        log.warn(kwargs)
-        simple.Show(simple.Cone(**kwargs))
+    # @register("vtk.data.add_sphere")
+    # def addSphere(self, **kwargs):
+    #     log.warn(kwargs)
+    #     simple.Show(simple.Sphere(**kwargs))
+
+    # @register("vtk.data.add_cone")
+    # def addCone(self, **kwargs):
+    #     log.warn(kwargs)
+    #     simple.Show(simple.Cone(**kwargs))
 
     @register("vtk.camera.reset")
     def resetCamera(self):

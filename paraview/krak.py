@@ -7,23 +7,27 @@ from paraview import simple
 
 uri = 'ws://0.0.0.0:1234/ws'
 
+object_registry = {}
+
 
 class KrakObject(ABC):
 
-    def __init__(self, scene=None):
-        self.websocket_connection = websocket.create_connection(uri)
-        self._send()
-        pass
+    def __init__(self, scene=None, type=None):
+        # self.websocket_connection = websocket.create_connection(uri)
+        # self._send()
+        self.id = str(random.random())
+        self.type = type
+        object_registry[self.id] = self
 
-    def _send(self):
-        data = {
-            'wslink': '1.0',
-            'id': str(random.random()),
-            'method': self.method,
-            'args': [],
-            'kwargs': self.kwargs}
+    # def _send(self):
+    #     data = {
+    #         'wslink': '1.0',
+    #         'id': str(random.random()),
+    #         'method': self.method,
+    #         'args': [],
+    #         'kwargs': self.kwargs}
 
-        self.websocket_connection.send(json.dumps(data))
+    #     self.websocket_connection.send(json.dumps(data))
 
     # def __del__(self):
     #     self.websocket_connection.close()
@@ -40,6 +44,7 @@ class KrakObject(ABC):
 
 
 class Sphere(KrakObject):
+
     def __init__(self, center=(0, 0, 0), radius=1):
         self.center = center
         self.radius = radius
@@ -50,7 +55,7 @@ class Sphere(KrakObject):
             'Radius': self.radius,
         }
         simple.Show(simple.Sphere(**self.kwargs))
-        # super().__init__()
+        super().__init__(type='sphere')
 
 
 class Cone(KrakObject):
@@ -68,4 +73,4 @@ class Cone(KrakObject):
         }
         simple.Show(simple.Cone(**self.kwargs))
 
-        # super().__init__()
+        super().__init__(type='cone')
