@@ -12,15 +12,16 @@ export default {
       permanent: true,
       expandOnHover: true,
       dark: true,
-      // objects: { id: 2 },
     };
   },
-  computed: mapState({
-    objects: (state) => state.cone.objects,
-  }),
-  // objects() {
-  //   return this.$store.getters.CONE_OBJECTS;
-  // },
+  computed: {
+    objects() {
+      return this.$store.state.cone.objects;
+    },
+    isMouseover() {
+      return this.$refs.drawer.isMouseover;
+    },
+  },
   methods: {
     triggerResize() {
       window.dispatchEvent(new Event('resize'));
@@ -63,7 +64,6 @@ export default {
           // this.$refs.drawer.$el.style.transition = '';
           // this.navigation.width = this.$refs.drawer.$el.style.width;
           document.body.style.cursor = '';
-          this.$store.dispatch('CONE_UPDATE_OBJECTS');
         },
         false
       );
@@ -72,6 +72,6 @@ export default {
 
   mounted() {
     this.setBorderWidth();
-    this.setEvents();
+    // this.setEvents();
   },
 };

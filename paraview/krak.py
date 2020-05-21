@@ -15,7 +15,6 @@ class KrakObject(ABC):
     def __init__(self, scene=None, type=None):
         # self.websocket_connection = websocket.create_connection(uri)
         # self._send()
-        self.id = str(random.random())
         self.type = type
         object_registry[self.id] = self
 
@@ -44,6 +43,7 @@ class KrakObject(ABC):
 
 
 class Sphere(KrakObject):
+    _id = 1
 
     def __init__(self, center=(0, 0, 0), radius=1):
         self.center = center
@@ -55,10 +55,15 @@ class Sphere(KrakObject):
             'Radius': self.radius,
         }
         simple.Show(simple.Sphere(**self.kwargs))
+        self.id = f"sphere_{self._id}"
+        Sphere._id += 1
+
         super().__init__(type='sphere')
 
 
 class Cone(KrakObject):
+    _id = 1
+
     def __init__(self, center=(0, 0, 0), radius=1, height=1):
         self.center = center
         self.radius = radius
@@ -72,5 +77,8 @@ class Cone(KrakObject):
             'Height': self.height,
         }
         simple.Show(simple.Cone(**self.kwargs))
+
+        self.id = f"cone_{self._id}"
+        Cone._id += 1
 
         super().__init__(type='cone')

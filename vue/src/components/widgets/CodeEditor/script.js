@@ -1,6 +1,7 @@
 import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/mode-python';
 
 export default {
@@ -18,10 +19,23 @@ export default {
   data() {
     return {
       aceEditor: null,
-      themePath: 'ace/theme/monokai',
       modePath: 'ace/mode/python',
     };
   },
+  computed: {
+    themePath() {
+      return this.$vuetify.theme.dark
+        ? 'ace/theme/monokai'
+        : 'ace/theme/github';
+    },
+  },
+
+  watch: {
+    themePath: function(newTheme) {
+      this.aceEditor.setTheme(newTheme);
+    },
+  },
+
   methods: {
     setCode(code) {
       this.aceEditor.setValue(code);
@@ -30,14 +44,9 @@ export default {
       return this.aceEditor.getValue();
     },
     runCode() {
-      this.$store.dispatch('CONE_RUN_CODE', this.getCode());
+      this.$store
+        .dispatch('CONE_RUN_CODE', this.getCode())
+        .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'));
     },
   },
-  // watch: {
-  //   content(value) {
-  //     if (this.beforeContent !== value) {
-  //       this.editor.setValue(value, 1);
-  //     }
-  //   },
-  // },
 };

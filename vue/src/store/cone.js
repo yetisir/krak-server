@@ -58,6 +58,7 @@ export default {
           )
           .catch(console.error);
       }
+      dispatch('CONE_UPDATE_OBJECTS');
     },
     // CONE_UPDATE_RESOLUTION({ rootState, commit }, resolution) {
     //   commit(Mutations.CONE_RESOLUTION_SET, resolution);

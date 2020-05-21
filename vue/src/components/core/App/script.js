@@ -1,4 +1,3 @@
-import logo from '@/assets/logo.png';
 import VtkView from '@/components/widgets/VtkView';
 import RemoteRenderingView from '@/components/widgets/RemoteRenderingView';
 import ProgressBar from '@/components/widgets/ProgressBar';
@@ -6,6 +5,7 @@ import NavigationDrawer from '@/components/widgets/NavigationDrawer';
 import CodeEditor from '@/components/widgets/CodeEditor';
 // import MonacoEditor from '@/components/widgets/MonacoEditor';
 import Console from '@/components/widgets/Console';
+import AppBar from '@/components/widgets/AppBar';
 
 // ----------------------------------------------------------------------------
 // Component API
@@ -21,24 +21,20 @@ export default {
     CodeEditor,
     // MonacoEditor,
     Console,
-  },
-  data() {
-    return {
-      logo,
-    };
+    AppBar,
   },
   computed: {
     client() {
       return this.$store.getters.NETWORK_CLIENT;
     },
-    darkMode: {
-      get() {
-        return this.$store.getters.APP_DARK_THEME;
-      },
-      set(value) {
-        this.$store.commit('APP_DARK_THEME_SET', value);
-      },
-    },
+    // darkMode: {
+    //   get() {
+    //     return this.$store.getters.APP_DARK_THEME;
+    //   },
+    //   set(value) {
+    //     this.$vuetify.theme.dark;
+    //   },
+    // },
     busyPercent() {
       return this.$store.getters.BUSY_PROGRESS;
     },
@@ -60,12 +56,7 @@ export default {
       this.$store.dispatch('CONE_INITIALIZE');
     },
   },
-  methods: {
-    resetCamera() {
-      this.$store.dispatch('CONE_RESET_CAMERA');
-    },
-    update_editor() {},
-  },
+
   mounted() {
     // Register view to the store
     this.$store.commit('VIEW_PROXY_SET', this.$refs.vtkViewComponent.view);

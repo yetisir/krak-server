@@ -1,24 +1,8 @@
-<v-app :dark="darkMode">
-  <progress-bar :progress="busyPercent" />
-  <v-toolbar clipped-left app>
-    <img :src="logo" :class="$style.logo" @click="resetCamera()" />
-    <span class="title">KraK</span>
-    <v-spacer />
-    <!-- <v-slider
-      :class="$style.slider"
-      hide-details
-      v-model="resolution"
-      :max="60"
-      :min="3"
-      :step="1"
-    /> -->
-    <!-- <v-spacer /> -->
-    <v-switch :class="$style.switch" hide-details v-model="darkMode" />
-  </v-toolbar>
+<v-app>
+  <progress-bar :progress="busyPercent" app />
+  <app-bar app />
+  <navigation-drawer app />
 
-  <navigation-drawer />
-
-  <!-- <remote-rendering-view :client="client" /> -->
   <v-content>
     <vtk-view ref="vtkViewComponent" />
     <v-tabs>
@@ -28,12 +12,6 @@
           <code-editor />
         </v-card>
       </v-tab-item>
-      <!-- <v-tab>Monaco</v-tab>
-      <v-tab-item>
-        <v-card flat>
-          <monaco-editor />
-        </v-card>
-      </v-tab-item> -->
       <v-tab>Console</v-tab>
       <v-tab-item>
         <v-card flat>
@@ -42,8 +20,4 @@
       </v-tab-item>
     </v-tabs>
   </v-content>
-  <!-- <div :id="editorId" style="width: 100%; height: 100%;"></div> -->
-  <!-- <remote-rendering-view :client="client" />
-    <vtk-view ref="vtkViewComponent" /> -->
-  <!-- </v-content> -->
 </v-app>
