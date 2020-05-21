@@ -40,6 +40,7 @@ class ParaViewCone(protocols.ParaViewWebProtocol):
         objects = []
         for obj in krak.object_registry.values():
             objects.append({
+                'id': obj.id,
                 'type': obj.type,
                 'kwargs': obj.kwargs,
             })

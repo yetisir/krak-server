@@ -15,8 +15,21 @@
   <v-tabs>
     <v-tab>Objects</v-tab>
     <v-tab-item>
+      <!-- <v-card>
+        <v-expansion-panels>
+          <v-expansion-panel v-for="object in objects">
+            <v-expansion-panel-header>{{object.type}}</v-expansion-panel-header>
+            <v-expansion-panel-content
+              >{{object.kwargs}}</v-expansion-panel-content
+            >
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card> -->
+
       <v-card v-for="object in objects">
-        <v-card-text>{{object}}</v-card-text>
+        <v-card-title class="headline">{{object.type}}</v-card-title>
+        <!-- <v-card-subtitle>{{object.type}}</v-card-subtitle> -->
+        <!-- <v-card-text>{{object.kwargs}}</v-card-text> -->
       </v-card>
     </v-tab-item>
     <v-tab>Scene</v-tab>
