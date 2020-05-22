@@ -1,17 +1,100 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-import { VueTerminal } from 'vue-terminal-ui';
+
+import '@/../node_modules/xterm/css/xterm.css';
+// import { VueTerminal } from 'vue-terminal-ui';
 // import { TerminalStream } from './terminal-stream';
 
 export default {
   name: 'Console',
-  components: {
-    VueTerminal,
+  // components: {
+  //   Terminal,
+  //   XTerm,
+  // },
+  props: {
+    height: {
+      type: String,
+      default: '100%',
+    },
+    intro: {
+      type: String,
+      default: 'KraK Console',
+    },
+    allowArbitrary: {
+      type: Boolean,
+      default: false,
+    },
+    fullScreen: {
+      type: Boolean,
+      default: false,
+    },
+    consoleSign: {
+      type: String,
+      default: '$',
+    },
   },
   data() {
     return {
-      intro: 'KraK Console',
+      terminal: null,
+      waiting: false,
     };
+  },
+  mounted() {
+    this.$store.dispatch('SSH_CONNECT');
+
+    var decoder = window.TextDecoder
+      ? new window.TextDecoder('utf-8')
+      : 'utf-8';
+
+    this.terminal = new Terminal({
+      cursorBlink: true,
+      theme: {
+        background: 'black',
+        cursor: 'blue',
+      },
+    });
+
+    this.terminal.open(this.$refs.terminal, true);
+    this.terminal.write('krak-terminal $: ');
+    // this.terminal.prompt();
+    this.terminal.onKey((e) => {
+      const ev = e.domEvent;
+      const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+
+      if (ev.keyCode === 13) {
+        this.terminal.writeln('');
+        this.terminal.write('krak-terminal $: ');
+      } else if (ev.keyCode === 8) {
+        // Do not delete the prompt
+        if (this.terminal._core.buffer.x > 2) {
+          this.terminal.write('\b \b');
+        }
+      } else if (printable) {
+        this.terminal.write(e.key);
+      }
+    });
+    // });
+    // this.sock = new window.WebSocket('ws://0.0.0.0:8888/ws');
+    // this.sock.onmessage = function(event) {
+    //   console.log(event);
+    // };
+    // this.sock.onopen = function(event) {
+    //   console.log(event);
+    //   console.log('Success ssh connect ...');
+    // };
+    // console.log('webbbbb');
+
+    //   data = new FormData()
+
+    //   jQuery.ajax({
+    //     url: 'http://0.0.0.0:8888',
+    //     type: 'post',
+    //     data: data,
+    //     complete: ajax_complete_callback,
+    //     cache: false,
+    //     contentType: false,
+    //     processData: false
+    // });
   },
   methods: {
     onCliCommand(data, resolve, reject) {
@@ -21,82 +104,8 @@ export default {
         resolve('');
       }, 300);
     },
+    toggleWaiting() {
+      this.waiting = !this.waiting;
+    },
   },
-  // watch: {
-  //   cols(c) {
-  //     this.$terminal.resize(c, this.rows);
-  //   },
-  //   rows(r) {
-  //     this.$terminal.resize(this.cols, r);
-  //   },
-  //   options: {
-  //     handler(o) {
-  //       Object.keys(o).forEach((key) => {
-  //         if (this[key] !== o[key]) this.$emit('update:' + key, o[key]);
-  //       });
-  //     },
-  //     deep: true,
-  //   },
-  // },
-
-  // mounted() {
-  //   // Object.keys(props).forEach((key) =>
-  //   //   this.$set(this.options, key, this[key])
-  //   // );
-  //   // let term = new Terminal({
-  //   //   cols: 80,
-  //   //   rows: 5,
-  //   // });
-  //   // let fitAddon = new FitAddon();
-  //   // term.loadAddon(fitAddon);
-  //   // fitAddon.fit();
-
-  //   // term.linkifier.setHypertextLinkHandler((e, uri) => {
-  //   //   this.$emit('link', uri);
-  //   // });
-  //   term.open(this.$el);
-  //   // if (this.buffer) term.write(this.buffer.replace(/\n/g, '\r\n') + '\r\n');
-  //   // term.on('blur', () => this.$emit('blur'));
-  //   // term.on('focus', () => this.$emit('focus'));
-  //   // term.on('resize', (size) => {
-  //   //   if (size.cols !== this.cols) this.$emit('update:cols', size.cols);
-  //   //   if (size.rows !== this.rows) this.$emit('update:rows', size.rows);
-  //   // });
-  //   // term.on('title', (title) => this.$emit('update:title', title));
-  //   // term.fit();
-  //   term.element.style.display = '';
-  //   term.refresh(0, term.rows - 1);
-  //   this.$terminal = term;
-  //   // this.$stream = new TerminalStream(this);
-  //   // Object.keys(props).forEach((key) =>
-  //   //   this.$watch(key, (val) => (this.options[key] = val))
-  //   // );
-  // },
-  // // beforeDestroy() {
-  // //   this.$terminal.selectAll();
-  // //   this.$emit('update:buffer', this.$terminal.getSelection().trim());
-  // //   this.$terminal.destroy();
-  // // },
-  // // methods: {
-  // // fit() {
-  // //   let parent = this.$el.parentNode;
-  // //   let term = this.$terminal;
-  // //   term.element.style.display = 'none';
-  // //   setTimeout(() => {
-  // //     this.$el.style.width =
-  // //       parent.offsetWidth - this.$el.offsetLeft + parent.offsetLeft + 'px';
-  // //     this.$el.style.height =
-  // //       parent.offsetHeight - this.$el.offsetTop + parent.offsetTop + 'px';
-  //     term.fit();
-  //     term.element.style.display = '';
-  //     term.refresh(0, term.rows - 1);
-  //   }, 0);
-  // },
-  //   focus() {
-  //     this.$terminal.focus();
-  //   },
-  //   blur() {
-  //     this.$terminal.blur();
-  //   },
-  // },
 };

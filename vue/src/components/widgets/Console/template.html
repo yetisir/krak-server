@@ -1,14 +1,23 @@
-<vue-terminal
+<!-- <vue-terminal
   :intro="intro"
   console-sign="$"
   allow-arbitrary
   height="500px"
   @command="onCliCommand"
-></vue-terminal>
-<!-- 
-<v-container>
-  <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-  <div>
-    <div class="console" id="terminal"></div>
+></vue-terminal> -->
+
+<div class="vue-terminal-wrapper">
+  <div class="lds-css" v-if="this.waiting">
+    <div style="width:100%;height:100%" class="lds-rolling">
+      <div></div>
+    </div>
   </div>
-</v-container> -->
+  <div
+    v-bind:style="{ maxHeight: this.height }"
+    id="terminal"
+    class="boring"
+    v-bind:class="{ 'default-height': !fullScreen, 'fullscreen-height': fullScreen }"
+    data-theme="boring"
+    ref="terminal"
+  ></div>
+</div>
