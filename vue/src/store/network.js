@@ -55,17 +55,6 @@ export default {
         commit('SSH_SOCK_SET', new window.WebSocket(url));
         console.log(url);
         console.log('connected ...*');
-        // encoding = 'utf-8',
-        // decoder = window.TextDecoder
-        //   ? new window.TextDecoder(encoding)
-        //   : encoding,
-        // terminal = document.getElementById('terminal'),
-        // term = new window.Terminal({
-        //   cursorBlink: true,
-        //   theme: {
-        //     background: url_opts_data.bgcolor || 'black',
-        // },
-        // });
       }
 
       jQuery.ajax({
@@ -76,7 +65,7 @@ export default {
           hostname: '0.0.0.0',
           port: '22',
           username: 'yeti',
-          password: 'Feldspar.!',
+          password: '',
           privatekey: '',
           passphrase: '',
           totp: '',

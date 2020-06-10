@@ -50,7 +50,7 @@ export default {
       cursorBlink: true,
       theme: {
         background: 'black',
-        cursor: 'blue',
+        cursor: 'white',
       },
     });
 
@@ -73,6 +73,8 @@ export default {
         this.terminal.write(e.key);
       }
     });
+
+    //*******************  */
     // });
     // this.sock = new window.WebSocket('ws://0.0.0.0:8888/ws');
     // this.sock.onmessage = function(event) {

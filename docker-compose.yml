@@ -40,8 +40,8 @@ services:
     environment:
       - PROTOCOL="ws"
     restart: always
-    depends_on:
-      - sandbox
+    # depends_on:
+    #   - sandbox
 
   vue:
     build: ./vue
@@ -52,12 +52,21 @@ services:
     restart: always
     depends_on:
       - paraview
+        #- webssh
 
-  sandbox:
-    build: ./sandbox
-    ports:
-      - 5550:5550
-    tty: true
+  # sandbox:
+  #   build: ./sandbox
+  #   ports:
+  #     - 5550:5550
+  #   tty: true
+
+        #webssh:
+        #build: ./webssh
+        #ports:
+        #- 8888:8888
+        #restart: always
+    # depends_on:
+    #   - sandbox
 
 volumes:
   postgres:

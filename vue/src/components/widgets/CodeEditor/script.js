@@ -1,7 +1,7 @@
 import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import 'ace-builds/src-noconflict/theme-monokai';
-import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/theme-clouds_midnight';
+import 'ace-builds/src-noconflict/theme-clouds';
 import 'ace-builds/src-noconflict/mode-python';
 
 export default {
@@ -25,10 +25,41 @@ export default {
   computed: {
     themePath() {
       return this.$vuetify.theme.dark
-        ? 'ace/theme/monokai'
-        : 'ace/theme/github';
+        ? 'ace/theme/clouds_midnight'
+        : 'ace/theme/clouds';
     },
   },
+
+  // //"chrome": "Chrome DevTools",
+  // "clouds": "Clouds",
+  // "clouds_midnight": "Clouds Midnight",
+  // "cobalt": "Cobalt",
+  // //"crimson_editor": "Crimson Editor",
+  // "dawn": "Dawn",
+  // //"dreamweaver": "Dreamweaver",
+  // //"eclipse": "Eclipse",
+  // //"github": "GitHub",
+  // "idle_fingers": "idleFingers",
+  // "kr_theme": "krTheme",
+  // "merbivore": "Merbivore",
+  // "merbivore_soft": "Merbivore Soft",
+  // "mono_industrial": "monoindustrial",
+  // "monokai": "Monokai",
+  // "nord_dark": "Nord Dark",
+  // "pastel_on_dark": "Pastels on Dark",
+  // "solarized_dark": "Solarized-dark",
+  // "solarized_light": "Solarized-light",
+  // "katzenmilch": "Katzenmilch",
+  // "kuroir": "Kuroir Theme",
+  // //"textmate": "Textmate (Mac Classic)",
+  // "tomorrow": "Tomorrow",
+  // "tomorrow_night": "Tomorrow-Night",
+  // "tomorrow_night_blue": "Tomorrow-Night-Blue",
+  // "tomorrow_night_bright": "Tomorrow-Night-Bright",
+  // "tomorrow_night_eighties": "Tomorrow-Night-Eighties",
+  // "twilight": "Twilight",
+  // "vibrant_ink": "Vibrant Ink",
+  // "xcode": "Xcode_default"
 
   watch: {
     themePath: function(newTheme) {
