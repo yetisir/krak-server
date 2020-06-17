@@ -1,6 +1,3 @@
-import sys
-import os
-import time
 import logging
 
 # from paraview.modules.vtkRemotingViews import vtkPVRenderView
@@ -15,12 +12,10 @@ log.setLevel(logging.DEBUG)
 log.info('testing')
 
 
-class ParaViewCone(protocols.ParaViewWebProtocol):
+class KrakProtocol(protocols.ParaViewWebProtocol):
 
     @register("vtk.initialize")
     def createVisualization(self):
-        # simple.Show(cone)
-        # simple.Show(sphere)
         return self.resetCamera()
 
     @register("code.run")
@@ -47,16 +42,6 @@ class ParaViewCone(protocols.ParaViewWebProtocol):
         log.warn(objects)
         return objects
 
-    # @register("vtk.data.add_sphere")
-    # def addSphere(self, **kwargs):
-    #     log.warn(kwargs)
-    #     simple.Show(simple.Sphere(**kwargs))
-
-    # @register("vtk.data.add_cone")
-    # def addCone(self, **kwargs):
-    #     log.warn(kwargs)
-    #     simple.Show(simple.Cone(**kwargs))
-
     @register("vtk.camera.reset")
     def resetCamera(self):
         view = self.getView('-1')
@@ -71,11 +56,6 @@ class ParaViewCone(protocols.ParaViewWebProtocol):
         self.getApplication().InvokeEvent('UpdateEvent')
 
         return self.getCamera()
-
-    # @register("vtk.cone.resolution.update")
-    # def updateResolution(self, resolution):
-    #     cone.Resolution = resolution
-    #     self.getApplication().InvokeEvent('UpdateEvent')
 
     @register("viewport.mouse.zoom.wheel")
     def updateZoomFromWheel(self, event):

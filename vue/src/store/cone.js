@@ -8,17 +8,11 @@ export default {
     CONE_OBJECTS(state) {
       return state.objects;
     },
-    //   CONE_RESOLUTION(state) {
-    //     return state.resolution;
-    //   },
   },
   mutations: {
     CONE_OBJECTS_SET(state, value) {
       state.objects = value;
     },
-    //   CONE_RESOLUTION_SET(state, value) {
-    //     state.resolution = value;
-    //   },
   },
   actions: {
     CONE_UPDATE_OBJECTS({ rootState, commit }) {
@@ -60,13 +54,6 @@ export default {
       }
       dispatch('CONE_UPDATE_OBJECTS');
     },
-    // CONE_UPDATE_RESOLUTION({ rootState, commit }, resolution) {
-    //   commit(Mutations.CONE_RESOLUTION_SET, resolution);
-    //   const client = rootState.network.client;
-    //   if (client) {
-    //     client.getRemote().Cone.updateResolution(resolution);
-    //   }
-    // },
     CONE_RESET_CAMERA({ rootState, dispatch }) {
       const client = rootState.network.client;
       if (client) {

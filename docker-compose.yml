@@ -54,11 +54,10 @@ services:
       - paraview
         #- webssh
 
-  # sandbox:
-  #   build: ./sandbox
-  #   ports:
-  #     - 5550:5550
-  #   tty: true
+  sandbox:
+    build: ./sandbox
+    ports:
+      - 5550:5550
 
         #webssh:
         #build: ./webssh

@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import json
 import random
 
-import websocket
 from paraview import simple
 
 uri = 'ws://0.0.0.0:1234/ws'

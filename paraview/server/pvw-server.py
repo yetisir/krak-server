@@ -4,82 +4,69 @@ r"""
 
         $ pvpython -dr /.../pvw-server.py
 
-    Any ParaViewWeb executable script comes with a set of standard arguments that can be overriden if need be::
+    Any ParaViewWeb executable script comes with a set of standard arguments
+    that can be overriden if need be::
 
         --port 8080
              Port number on which the HTTP server will listen.
 
         --content /path-to-web-content/
              Directory that you want to serve as static web content.
-             By default, this variable is empty which means that we rely on another
+             By default, this variable is empty which means that we rely on
+             another
              server to deliver the static content and the current process only
              focuses on the WebSocket connectivity of clients.
 
         --authKey vtkweb-secret
-             Secret key that should be provided by the client to allow it to make
-             any WebSocket communication. The client will assume if none is given
+             Secret key that should be provided by the client to allow it to
+             make
+             any WebSocket communication. The client will assume if none is
+             given
              that the server expects "vtkweb-secret" as secret key.
 
 """
-
-# import to process args
-import os
-import sys
 import argparse
 
 from paraview import simple
 from paraview.web import pv_wslink
 from paraview.web import protocols
 
-# import RPC annotation
-from wslink import register
 from wslink import server
 
-import pv_protocol
-
-# import argparse
-
-# =============================================================================
-# Create custom Pipeline Manager class to handle clients requests
-# =============================================================================
+import interface
 
 
 class Server(pv_wslink.PVServerProtocol):
 
-    @staticmethod
-    def configure(settings):
-        Server.authKey = settings.authKey
-        Server.viewportScale = settings.viewportScale
-        Server.viewportMaxWidth = settings.viewportMaxWidth
-        Server.viewportMaxHeight = settings.viewportMaxHeight
-        Server.settingsLODThreshold = settings.settingsLODThreshold
+    @classmethod
+    def configure(cls, settings):
+        cls.authKey = settings.authKey
+        cls.viewportScale = settings.viewportScale
+        cls.viewportMaxWidth = settings.viewportMaxWidth
+        cls.viewportMaxHeight = settings.viewportMaxHeight
+        cls.settingsLODThreshold = settings.settingsLODThreshold
 
     def initialize(self):
         # Bring used components from ParaView
         self.registerVtkWebProtocol(
             protocols.ParaViewWebViewPort(
-                Server.viewportScale,
-                Server.viewportMaxWidth,
-                Server.viewportMaxHeight,
-            ))
+                self.viewportScale, self.viewportMaxWidth, self.viewportMaxHeight))
         self.registerVtkWebProtocol(
             protocols.ParaViewWebPublishImageDelivery(decode=False))
-
-        # Bring used components from ParaView Lite
-        self.registerVtkWebProtocol(
-            pv_protocol.ParaViewCone())
+        self.registerVtkWebProtocol(interface.KrakProtocol())
 
         # Update authentication key to use
         self.updateSecret(Server.authKey)
 
-        # tell the C++ web app to use no encoding. ParaViewWebPublishImageDelivery must be set to decode=False to match.
+        # tell the C++ web app to use no encoding.
+        # ParaViewWebPublishImageDelivery must be set to decode=False to match.
         self.getApplication().SetImageEncoding(0)
 
         # Disable interactor-based render calls
         view = simple.GetRenderView()
         view.EnableRenderOnInteraction = 0
         view.OrientationAxesVisibility = 0
-        view.Background = [0.5, 0.5, 0.5]
+        view.Background = [0.5, 0.5, 0.5] #
 
         # ProxyManager helper
         pxm = simple.servermanager.ProxyManager()
@@ -88,11 +75,12 @@ class Server(pv_wslink.PVServerProtocol):
         interactionProxy = pxm.GetProxy(
             'settings', 'RenderViewInteractionSettings')
         interactionProxy.Camera3DManipulators = [
-            'Rotate', 'Pan', 'Zoom', 'Pan', 'Roll', 'Pan', 'Zoom', 'Rotate', 'Zoom']
+            'Rotate', 'Pan', 'Zoom', 'Pan', 'Roll', 'Pan', 'Zoom',
+            'Rotate', 'Zoom']
 
         # Custom rendering settings
         renderingSettings = pxm.GetProxy('settings', 'RenderViewSettings')
-        renderingSettings.LODThreshold = Server.settingsLODThreshold
+        renderingSettings.LODThreshold = self.settingsLODThreshold
 
 
 if __name__ == "__main__":
