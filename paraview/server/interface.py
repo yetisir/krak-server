@@ -1,5 +1,6 @@
 import logging
 
+
 # from paraview.modules.vtkRemotingViews import vtkPVRenderView
 from paraview.web import protocols
 from paraview import simple
@@ -17,6 +18,17 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
     @register("vtk.initialize")
     def createVisualization(self):
         return self.resetCamera()
+
+
+    @register('vtk.background.set')
+    def set_background(self, dark):
+        view = simple.GetRenderView()
+        if dark is True:
+            color = [0.1, 0.1, 0.1]
+        else:
+            color = [0.9, 0.9, 0.9]
+        view.Background = color
+
 
     @register("code.run")
     def runCode(self, text):

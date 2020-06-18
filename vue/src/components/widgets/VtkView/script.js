@@ -1,7 +1,5 @@
 import vtkViewProxy from 'vtk.js/Sources/Proxy/Core/ViewProxy';
 
-// ----------------------------------------------------------------------------
-
 export default {
   name: 'VtkView',
   data() {
@@ -12,33 +10,13 @@ export default {
   mounted() {
     this.container = this.$el.querySelector('.js-renderer');
     this.view.setContainer(this.container);
-    this.view.getRenderer().setBackground(0.5, 0.5, 0.5);
     this.onResize();
+    this.view.getRenderer().setBackground(0.1, 0.1, 0.1);
   },
   beforeDestroy() {
     this.view.delete();
   },
-  // },  watch: {
-  //   viewProxySize() {
-  //     this.view.resize();
-  //   },
-  // },
-  // updated() {
-  //   this.view.resize();
-  // },
   methods: {
-    //   viewProxySize() {
-    //     // const container = this.view.getContainer();
-    //     const container = this.$el.querySelector('.js-renderer');
-
-    //     // return container;
-    //     return container.getBoundingClientRect().width;
-    //     // } catch (err) {
-    //     //   return err;
-    //     // }
-    //     // getBoundingClientRect
-    //     // return this.view. ? this.view.getRenderWindow() : null;
-    //   },
     onResize() {
       if (this.view) {
         this.view.resize();
@@ -49,6 +27,21 @@ export default {
       if (this.view) {
         this.view.resetCamera();
       }
+    },
+  },
+  computed: {
+    dark() {
+      return this.$vuetify.theme.dark;
+    },
+  },
+  watch: {
+    dark() {
+      // if (this.dark) {
+      //   this.view.setBackground([0.9, 0.1, 0.1, 0]);
+      // } else {
+      //   this.view.setBackground([0.9, 0.9, 0.9, 0]);
+      // }
+      this.$store.dispatch('CONE_SET_BACKGROUND', this.dark);
     },
   },
 };

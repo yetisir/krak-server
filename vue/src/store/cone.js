@@ -50,9 +50,9 @@ export default {
               });
             }
           )
+          .then(dispatch('CONE_UPDATE_OBJECTS'))
           .catch(console.error);
       }
-      dispatch('CONE_UPDATE_OBJECTS');
     },
     CONE_RESET_CAMERA({ rootState, dispatch }) {
       const client = rootState.network.client;
@@ -72,6 +72,15 @@ export default {
             }
           )
           .catch(console.error);
+      }
+    },
+    CONE_SET_BACKGROUND({ rootState, dispatch }, dark) {
+      const client = rootState.network.client;
+      if (client) {
+        client
+          .getRemote()
+          .Cone.setBackground(dark)
+          .then(dispatch('VIEW_UPDATE_RESIZE'));
       }
     },
   },

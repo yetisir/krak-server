@@ -77,7 +77,8 @@ export default {
     runCode() {
       this.$store
         .dispatch('CONE_RUN_CODE', this.getCode())
-        .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'));
+        .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'))
+        .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
     },
   },
 };

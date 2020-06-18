@@ -118,7 +118,9 @@ export default {
   },
   actions: {
     VIEW_UPDATE_RESIZE({ state }) {
-      state.viewProxy.resize();
+      if (state.viewProxy) {
+        state.viewProxy.resize();
+      }
     },
     VIEW_UPDATE_CAMERA(
       { state },
@@ -181,7 +183,7 @@ export default {
         intervalId = setInterval(rotate, 10);
       }
     },
-    VIEW_REMOTE_RENDERING_SETUP({ state, rootState }) {
+    VIEW_REMOTE_RENDERING_SETUP({ state, rootState, dispatch }) {
       const client = rootState.network.client;
       const view = state.viewProxy;
 
@@ -189,7 +191,7 @@ export default {
         // Create and link viewStream
         const viewStream = client.getImageStream().createViewStream('-1');
         view.getOpenglRenderWindow().setViewStream(viewStream);
-        view.setBackground([0, 0, 0, 0]);
+        // view.setBackground([0.1, 0.1, 0.1, 0]);
         const camera = view.getCamera();
         viewStream.setCamera(camera);
 
@@ -199,6 +201,7 @@ export default {
         interactor.onEndAnimation(viewStream.endInteraction);
 
         view.onResize(viewStream.render);
+        dispatch('CONE_SET_BACKGROUND', true);
       }
     },
   },

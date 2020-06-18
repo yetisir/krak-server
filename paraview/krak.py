@@ -40,6 +40,19 @@ class KrakObject(ABC):
     # def kwargs(self):
     #     raise NotImplementedError
 
+class Hills(KrakObject):
+    _id = 1
+
+    def __init__(self):
+        from pyvista import examples
+        topo = examples.load_random_hills()
+
+        from paraview import  simple
+
+        tp = simple.TrivialProducer()
+        tp.GetClientSideObject().SetOutput(topo)
+
+        simple.Show(tp)
 
 class Sphere(KrakObject):
     _id = 1
