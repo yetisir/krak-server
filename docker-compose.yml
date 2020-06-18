@@ -48,7 +48,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./vue:/app
+      - ./vue/src:/app/src
     restart: always
     depends_on:
       - paraview
