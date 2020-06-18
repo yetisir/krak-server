@@ -31,5 +31,5 @@ The latest documentation is hosted [here](https://krak.readthedocs.io/en/latest/
 
 
 ## License
-dNote is licensed under the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+KraK Server is licensed under the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
 
