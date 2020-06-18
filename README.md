@@ -2,9 +2,7 @@
 
 # KraK Server - Web based UI for the [Krak Library](https://github.com/yetisir/krak-server)
 
-KraK Server is a Vue.js frontend UI for the KraK library using VTK as backend for rendering the models. This is still a work in progress and features may be incomplete and/or undocumented.
-
-KraK server allows an interactive approach to developing python scripts for the KraK library
+KraK Server is a Vue.js frontend UI for the KraK library using VTK as backend for rendering the models. This is still a prototype and a work in progress and features may be incomplete and/or undocumented.
 
 ## Installation
 
@@ -31,5 +29,5 @@ The latest documentation is hosted [here](https://krak.readthedocs.io/en/latest/
 
 
 ## License
-dNote is licensed under the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+KraK Server is licensed under the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
 
