@@ -14,22 +14,22 @@ services:
       POSTGRES_DB: borehole_database
     restart: always
 
-  # rest:
-  #   build: ./rest
-  #   ports:
-  #     - 5001:5001
-  #   volumes:
-  #     - ./rest:/app # for debug mode - not neccessary for production
-  #     - postgres_binary:/var/lib/postgres_binary
-  #   environment:
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: admin
-  #     POSTGRES_DB: borehole_database
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_HOST: postgres
-  #   restart: always
-  #   depends_on:
-  #       - postgres
+  rest:
+    build: ./rest
+    ports:
+      - 5001:5001
+    volumes:
+      - ./rest:/app # for debug mode - not neccessary for production
+      - postgres_binary:/var/lib/postgres_binary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: borehole_database
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres
+    restart: always
+    depends_on:
+        - postgres
 
   paraview:
     build: ./paraview
