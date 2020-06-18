@@ -23,13 +23,16 @@
     <v-tab-item>
       <v-card>
         <v-expansion-panels hover focusable multiple>
-          <v-expansion-panel v-for="object in objects">
+          <v-expansion-panel v-for="object in objects" v-bind:key="object.name">
             <v-expansion-panel-header>
               {{object.id}}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-list dense>
-                <v-list-item v-for="(value, key) in object.kwargs">
+                <v-list-item
+                  v-for="(value, key) in object.kwargs"
+                  v-bind:key="key"
+                >
                   <v-list-item-content>{{key}}: {{value}}</v-list-item-content>
                 </v-list-item>
               </v-list>

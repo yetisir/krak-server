@@ -9,6 +9,10 @@ module.exports = {
     vtkChainWebpack(config);
   },
 
+  // devServer: {
+  //   disableHostCheck: true,
+  // },
+
   // configureWebpack: {
   //   // resolve: {
   //   //   alias: {

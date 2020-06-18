@@ -3,8 +3,6 @@ import SmartConnect from 'wslink/src/SmartConnect';
 
 import coneProtocol from '@/io/protocol';
 
-import jQuery from 'jquery';
-
 // Bind vtkWSLinkClient to our SmartConnect
 vtkWSLinkClient.setSmartConnectClass(SmartConnect);
 
@@ -37,43 +35,6 @@ export default {
     },
   },
   actions: {
-    SSH_CONNECT({ commit, state }) {
-      function ajax_complete_callback(resp) {
-        if (resp.status !== 200) {
-          log_status(resp.status + ': ' + resp.statusText, true);
-          state = DISCONNECTED;
-          return;
-        }
-
-        var msg = resp.responseJSON;
-        if (!msg.id) {
-          log_status(msg.status, true);
-          state = DISCONNECTED;
-          return;
-        }
-        var url = 'ws://0.0.0.0:8888/ws?id=' + msg.id;
-        commit('SSH_SOCK_SET', new window.WebSocket(url));
-        console.log(url);
-        console.log('connected ...*');
-      }
-
-      jQuery.ajax({
-        url: 'http://0.0.0.0:8888',
-        type: 'post',
-        complete: ajax_complete_callback,
-        data: {
-          hostname: '0.0.0.0',
-          port: '22',
-          username: 'yeti',
-          password: '',
-          privatekey: '',
-          passphrase: '',
-          totp: '',
-          term: 'xterm-256color',
-        },
-      });
-    },
-
     NETWORK_CONNECT({ commit, state }) {
       const { config, client } = state;
       if (client && client.isConnected()) {
