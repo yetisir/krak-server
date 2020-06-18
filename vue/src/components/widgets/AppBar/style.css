@@ -1,0 +1,15 @@
+.logo {
+  height: 35px;
+  padding-right: 10px;
+}
+
+/* .slider {
+    max-width: 300px;
+  } */
+
+.switch {
+  max-width: 100px;
+  width: auto;
+  flex: 0;
+  padding-left: 20px;
+}

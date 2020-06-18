@@ -31,6 +31,48 @@ services:
     depends_on:
         - postgres
 
+  paraview:
+    build: ./paraview
+    volumes:
+      - ./paraview:/opt/paraview/app
+    ports:
+      - 1234:1234
+    environment:
+      - PROTOCOL="ws"
+    restart: always
+    # depends_on:
+    #   - sandbox
+
+  vue:
+    build: ./vue
+    ports:
+      - 8080:8080
+    volumes:
+      - ./vue/src:/app/src
+    restart: always
+    depends_on:
+      - paraview
+        #- webssh
+
+  sandbox:
+    build: ./sandbox
+    ports:
+      - 5550:5550
+
+        #webssh:
+        #build: ./webssh
+        #ports:
+        #- 8888:8888
+        #restart: always
+    # depends_on:
+    #   - sandbox
+
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+
 volumes:
   postgres:
     driver: local

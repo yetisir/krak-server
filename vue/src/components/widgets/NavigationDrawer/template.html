@@ -1,0 +1,55 @@
+<v-navigation-drawer
+  app
+  right
+  ref="drawer"
+  expand-on-hover
+  floating
+  permanent
+  width="512"
+  v-bind="$attrs"
+  color="transparent"
+>
+  <!-- <v-toolbar>
+    <v-toolbar-title class="headline text-uppercase">
+      <v-icon>mdi-arrow-left-bold</v-icon>
+    </v-toolbar-title>
+  </v-toolbar> -->
+  <v-tabs grow show-arrows>
+    <v-tab>
+      Objects
+      <v-spacer />
+      <v-icon>mdi-vector-link</v-icon>
+    </v-tab>
+    <v-tab-item>
+      <v-card>
+        <v-expansion-panels hover focusable multiple>
+          <v-expansion-panel v-for="object in objects" v-bind:key="object.name">
+            <v-expansion-panel-header>
+              {{object.id}}
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-list dense>
+                <v-list-item
+                  v-for="(value, key) in object.kwargs"
+                  v-bind:key="key"
+                >
+                  <v-list-item-content>{{key}}: {{value}}</v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card>
+    </v-tab-item>
+    <v-tab>
+      Scene
+      <v-spacer />
+      <v-icon>mdi-wall</v-icon>
+    </v-tab>
+    <v-tab-item>
+      <v-card>
+        <v-card-text>Scene Details</v-card-text>
+      </v-card>
+    </v-tab-item>
+  </v-tabs>
+</v-navigation-drawer>

@@ -1,0 +1,29 @@
+<v-app>
+  <progress-bar :progress="busyPercent" app />
+  <app-bar app />
+  <navigation-drawer app />
+
+  <v-content>
+    <vtk-view ref="vtkViewComponent" />
+    <v-tabs>
+      <v-tab>Editor</v-tab>
+      <v-tab-item>
+        <v-card>
+          <code-editor />
+        </v-card>
+      </v-tab-item>
+      <v-tab>Console</v-tab>
+      <v-tab-item>
+        <v-card>
+          <!-- <console /> -->
+        </v-card>
+      </v-tab-item>
+      <v-tab>Environment</v-tab>
+      <v-tab-item>
+        <v-card>
+          <!-- <code-editor /> -->
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
+  </v-content>
+</v-app>
