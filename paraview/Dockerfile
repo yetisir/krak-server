@@ -5,5 +5,7 @@ WORKDIR /opt/paraview/app
 
 ENV PYTHONPATH=${PYTHONPATH}:/opt/paraview/lib/python3.6/site-packages
 
-CMD python server/pvw-server.py --port 1234
+COPY server/* server/
+
+CMD python server/main.py --port 1234
 
