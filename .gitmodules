@@ -1,3 +1,6 @@
 [submodule "rest/openapi"]
 	path = rest/openapi
 	url = http://github.com/yetisir/krak-openapi.git
+[submodule "sandbox"]
+	path = sandbox
+	url = https://github.com/yetisir/krak
