@@ -1,49 +1,47 @@
 version: "3"
 
 services:
-  # postgres:
-  #   build: ./postgres
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - postgres:/var/lib/postgres
-  #     - postgres_binary:/var/lib/postgres_binary
-  #   environment:
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: admin
-  #     POSTGRES_DB: borehole_database
-  #   restart: always
+  postgres:
+    build: ./postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgres
+      - postgres_binary:/var/lib/postgres_binary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: borehole_database
+    restart: always
 
-  # rest:
-  #   build: ./rest
-  #   ports:
-  #     - 5001:5001
-  #   volumes:
-  #     - ./rest:/app # for debug mode - not neccessary for production
-  #     - postgres_binary:/var/lib/postgres_binary
-  #   environment:
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: admin
-  #     POSTGRES_DB: borehole_database
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_HOST: postgres
-  #   restart: always
-  #   depends_on:
-  #       - postgres
+  rest:
+    build: ./rest
+    ports:
+      - 5001:5001
+    volumes:
+      - ./rest:/app # for development - not neccessary for production
+      - postgres_binary:/var/lib/postgres_binary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: borehole_database
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres
+    restart: always
+    depends_on:
+      - postgres
 
   paraview:
     build: ./paraview
     volumes:
       # - ./paraview/server:/opt/paraview/app/server
       - ./paraview:/opt/paraview/app/
+      - /var/run/docker.sock:/var/run/docker.sock #todo: use proper sandbox server to avoid security hole
     ports:
       - 1234:1234
       - 1235:1235
-    # environment:
-    #   - PROTOCOL="ws"
     restart: always
-    # depends_on:
-    #   - sandbox
+
   vue:
     build: ./vue
     ports:
@@ -53,17 +51,17 @@ services:
     restart: always
     depends_on:
       - paraview
-        #- webssh
-  # sandbox:
-  #   build: ./sandbox
-  #   ports:
-  #     - 5550:5550
+
+  # this is not a secure sandbox
+  sandbox:
+    build: ./sandbox
+
   # nginx:
   #   build: ./nginx
   #   ports:
   #     - 80:80
-# volumes:
-#   postgres:
-#     driver: local
-#   postgres_binary:
-#     driver: local
+volumes:
+  postgres:
+    driver: local
+  postgres_binary:
+    driver: local

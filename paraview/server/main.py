@@ -8,7 +8,6 @@ def get_parser():
     # TODO: Move to ENV variables
     parser = argparse.ArgumentParser(
         description="KraK Render Server")
-
     parser.add_argument(
         "-d", "--debug",
         help="log debugging messages to stdout",
@@ -27,7 +26,8 @@ def get_parser():
         help="Authentication key for clients to connect to the WebSocket.")
     parser.add_argument(
         "-f", "--force-flush", default=False,
-        help="If provided, this option will force additional padding content to the output.  Useful when application is triggered by a session manager.", dest="forceFlush", action='store_true')
+        help="If provided, this option will force additional padding content to the output.  Useful when application is triggered by a session manager.",
+        dest="forceFlush", action='store_true')
     parser.add_argument(
         "-ws", "--ws-endpoint", type=str, default="ws", dest='ws',
         help="Specify WebSocket endpoint. (e.g. foo/bar/ws, Default: ws)")

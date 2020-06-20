@@ -1,9 +1,14 @@
+import json
+import sys
+
+import pyvista
+import numpy as np
+
 from paraview import simple
 from paraview.web import pv_wslink
 from paraview.web import protocols
-
-from twisted.internet import protocol
-
+# from twisted.internet import protocol
+from twisted.protocols import basic
 from autobahn.twisted.resource import WebSocketResource
 
 import interface
@@ -57,8 +62,23 @@ class WebSocketServerProtocol(pv_wslink.PVServerProtocol):
         renderingSettings.LODThreshold = self.settingsLODThreshold
 
 
-class TCPSocketServerProtocol(protocol.Protocol):
-    def dataReceived(self, data):
-        "As soon as any data is received, write it back."
-        print(data)
-        self.transport.write(data)
+class TCPSocketServerProtocol(basic.LineReceiver):
+
+    MAX_LENGTH = 2**32
+
+    def lineReceived(self, data):
+        objects = json.loads(data)
+
+        simple.ResetSession()
+        for obj in objects:
+            vtk_object = pyvista.UnstructuredGrid(
+                np.array(obj['offset']),
+                np.array(obj['cells']),
+                np.array(obj['celltypes']),
+                np.array(obj['points']),
+            )
+
+            paraview_connection = simple.TrivialProducer()
+            paraview_connection.GetClientSideObject().SetOutput(vtk_object)
+
+            simple.Show(paraview_connection)

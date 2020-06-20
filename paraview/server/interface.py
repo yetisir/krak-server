@@ -1,12 +1,12 @@
 import logging
-
+import sys
 
 # from paraview.modules.vtkRemotingViews import vtkPVRenderView
 from paraview.web import protocols
 from paraview import simple
 from wslink import register
 
-import krak
+import docker
 
 log = logging.Logger('default')
 log.setLevel(logging.DEBUG)
@@ -19,7 +19,6 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
     def createVisualization(self):
         return self.resetCamera()
 
-
     @register('vtk.background.set')
     def set_background(self, dark):
         view = simple.GetRenderView()
@@ -29,7 +28,6 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             color = [0.9, 0.9, 0.9]
         view.Background = color
 
-
     @register("code.run")
     def runCode(self, text):
         log.warn(text)
@@ -37,10 +35,14 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             simple.Hide(source)
         simple.ResetSession()
 
-        # temporary highly insecure
-        krak.object_registry = {}
+        # temporary - still insecure
+        client = docker.from_env()
+        stdout = client.containers.run(
+            'krak-server_sandbox', 'python -c {text}')
+        log.warn(stdout)
+        # krak.object_registry = {}
 
-        exec(text)
+        # exec(text)
 
     @register('data.objects')
     def getKrakObjects(self):
