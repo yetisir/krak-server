@@ -1,7 +1,7 @@
 import vtkWSLinkClient from 'vtk.js/Sources/IO/Core/WSLinkClient';
 import SmartConnect from 'wslink/src/SmartConnect';
 
-import coneProtocol from '@/io/protocol';
+import codeProtocol from '@/io/protocol';
 
 // Bind vtkWSLinkClient to our SmartConnect
 vtkWSLinkClient.setSmartConnectClass(SmartConnect);
@@ -44,7 +44,7 @@ export default {
       if (!clientToConnect) {
         clientToConnect = vtkWSLinkClient.newInstance();
         clientToConnect.setProtocols({
-          Cone: coneProtocol,
+          Code: codeProtocol,
         });
       }
 

@@ -2,7 +2,7 @@
 import Vuex from 'vuex';
 
 import busy from '@/store/busy';
-import cone from '@/store/cone';
+import code from '@/store/code';
 import network from '@/store/network';
 import view from '@/store/view';
 
@@ -10,25 +10,25 @@ import view from '@/store/view';
 
 function createStore() {
   return new Vuex.Store({
-    state: {
-      dark: true,
-    },
+    // state: {
+    //   dark: true,
+    // },
     modules: {
       busy,
-      cone,
+      code,
       network,
       view,
     },
-    getters: {
-      APP_DARK_THEME(state) {
-        return state.dark;
-      },
-    },
-    mutations: {
-      APP_DARK_THEME_SET(state, isDark) {
-        state.dark = isDark;
-      },
-    },
+    // getters: {
+    //   APP_DARK_THEME(state) {
+    //     return state.dark;
+    //   },
+    // },
+    // mutations: {
+    //   APP_DARK_THEME_SET(state, isDark) {
+    //     state.dark = isDark;
+    //   },
+    // },
   });
 }
 

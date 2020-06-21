@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     objects() {
-      return this.$store.state.cone.objects;
+      return this.$store.state.code.objects;
     },
     isMouseover() {
       return this.$refs.drawer.isMouseover;

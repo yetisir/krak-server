@@ -6,7 +6,15 @@
   <div class="ace-container">
     <div class="ace-editor" ref="ace"></div>
   </div>
-  <v-btn fab small absolute color="green" @click="runCode">
-    <v-icon color="white">mdi-play</v-icon>
+  <v-btn
+    fab
+    small
+    absolute
+    :color="buttonColor"
+    @click="runCode"
+    :loading="buttonLoading"
+    :disabled="buttonLoading"
+  >
+    <v-icon color="white">{{buttonIcon}}</v-icon>
   </v-btn>
 </v-container>

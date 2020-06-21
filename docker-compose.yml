@@ -55,7 +55,8 @@ services:
   # this is not a secure sandbox
   sandbox:
     build: ./sandbox
-
+    volumes:
+      - ./sandbox:/krak
   # nginx:
   #   build: ./nginx
   #   ports:

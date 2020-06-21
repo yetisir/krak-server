@@ -1,3 +1,4 @@
+import { mapGetters } from 'vuex';
 import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-noconflict/theme-clouds_midnight';
@@ -15,55 +16,45 @@ export default {
       tabSize: 4,
     });
     this.aceEditor.setAutoScrollEditorIntoView(true);
+    // this.pollStatus();
   },
   data() {
     return {
       aceEditor: null,
       modePath: 'ace/mode/python',
+      buttonColor: '',
+      buttonIcon: '',
+      buttonLoading: false,
     };
   },
   computed: {
+    ...mapGetters(['CODE_STATUS']),
     themePath() {
       return this.$vuetify.theme.dark
         ? 'ace/theme/clouds_midnight'
         : 'ace/theme/clouds';
     },
+    codeStatus() {
+      return this.$store.getters.CODE_STATUS;
+    },
   },
 
-  // //"chrome": "Chrome DevTools",
-  // "clouds": "Clouds",
-  // "clouds_midnight": "Clouds Midnight",
-  // "cobalt": "Cobalt",
-  // //"crimson_editor": "Crimson Editor",
-  // "dawn": "Dawn",
-  // //"dreamweaver": "Dreamweaver",
-  // //"eclipse": "Eclipse",
-  // //"github": "GitHub",
-  // "idle_fingers": "idleFingers",
-  // "kr_theme": "krTheme",
-  // "merbivore": "Merbivore",
-  // "merbivore_soft": "Merbivore Soft",
-  // "mono_industrial": "monoindustrial",
-  // "monokai": "Monokai",
-  // "nord_dark": "Nord Dark",
-  // "pastel_on_dark": "Pastels on Dark",
-  // "solarized_dark": "Solarized-dark",
-  // "solarized_light": "Solarized-light",
-  // "katzenmilch": "Katzenmilch",
-  // "kuroir": "Kuroir Theme",
-  // //"textmate": "Textmate (Mac Classic)",
-  // "tomorrow": "Tomorrow",
-  // "tomorrow_night": "Tomorrow-Night",
-  // "tomorrow_night_blue": "Tomorrow-Night-Blue",
-  // "tomorrow_night_bright": "Tomorrow-Night-Bright",
-  // "tomorrow_night_eighties": "Tomorrow-Night-Eighties",
-  // "twilight": "Twilight",
-  // "vibrant_ink": "Vibrant Ink",
-  // "xcode": "Xcode_default"
-
   watch: {
-    themePath: function(newTheme) {
+    themePath(newTheme) {
       this.aceEditor.setTheme(newTheme);
+    },
+    codeStatus(newStatus) {
+      if (newStatus == 'running') {
+        this.buttonLoading = false;
+        this.buttonColor = 'red';
+        this.buttonIcon = 'mdi-stop';
+      } else if (newStatus === 'submitted') {
+        this.buttonLoading = true;
+      } else {
+        this.newStatus = false;
+        this.buttonColor = 'green';
+        this.buttonIcon = 'mdi-play';
+      }
     },
   },
 
@@ -75,10 +66,17 @@ export default {
       return this.aceEditor.getValue();
     },
     runCode() {
+      const method = this.codeStatus ? 'CODE_RUN' : 'CODE_STOP';
       this.$store
-        .dispatch('CONE_RUN_CODE', this.getCode())
-        .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'))
+        .dispatch(method, this.getCode())
+        // .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'))
         .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
     },
+    // pollStatus() {
+    //   setInterval(() => {
+    //     this.$store.dispatch('CODE_UPDATE');
+    //     console.log('loading ' + this.codeRunning + ' ' + this.buttonLoading);
+    //   }, 100);
+    // },
   },
 };

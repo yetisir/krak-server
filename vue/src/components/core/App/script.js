@@ -58,7 +58,7 @@ export default {
     this.$store.commit('VIEW_PROXY_SET', this.$refs.vtkViewComponent.view);
 
     // Initiate network connection
-    const config = { application: 'cone' };
+    const config = { application: 'code' };
     config.sessionURL = 'ws://localhost:1234/ws';
     this.$store.commit('NETWORK_CONFIG_SET', config);
     this.$store.dispatch('NETWORK_CONNECT');

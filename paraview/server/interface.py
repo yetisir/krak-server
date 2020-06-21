@@ -15,8 +15,13 @@ log.info('testing')
 
 class KrakProtocol(protocols.ParaViewWebProtocol):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sandbox = None
+
     @register("vtk.initialize")
     def createVisualization(self):
+        simple.Show(simple.Sphere())
         return self.resetCamera()
 
     @register('vtk.background.set')
@@ -28,8 +33,15 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             color = [0.9, 0.9, 0.9]
         view.Background = color
 
+    @register('code.stop')
+    def stopCode(self):
+        log.warn('stopping...')
+        if self.sandbox is not None:
+            self.sandbox.kill()
+
     @register("code.run")
     def runCode(self, text):
+        log.warn('starting...')
         log.warn(text)
         for source in simple.GetSources().values():
             simple.Hide(source)
@@ -37,23 +49,45 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
 
         # temporary - still insecure
         client = docker.from_env()
-        stdout = client.containers.run(
-            'krak-server_sandbox', 'python -c {text}')
-        log.warn(stdout)
-        # krak.object_registry = {}
+        try:
+            self.sandbox = client.containers.run(
+                image='krak-server_sandbox',
+                command=f'python -c "{text}"',
+                detach=False,
+                network='krak-server_default',
+                remove=True,
+            )
+        except Exception as e:
+            log.warn('error ....')
+            log.error(e)
+            raise e
 
-        # exec(text)
+    # @register('code.stdout')
+    # def getCodeStdout
+
+    @register('code.status')
+    def getCodeStatus(self):
+
+        log.warn('bigbig')
+        self.publish('code.stdout', 'bigbigbig')
+
+        try:
+            self.sandbox.reload()
+            status = self.sandbox.status
+            return status
+        except Exception:  # TODO: usea proper exception
+            return 'exited'
 
     @register('data.objects')
     def getKrakObjects(self):
         objects = []
-        for obj in krak.object_registry.values():
-            objects.append({
-                'id': obj.id,
-                'type': obj.type,
-                'kwargs': obj.kwargs,
-            })
-        log.warn(objects)
+        # for obj in krak.object_registry.values():
+        #     objects.append({
+        #         'id': obj.id,
+        #         'type': obj.type,
+        #         'kwargs': obj.kwargs,
+        #     })
+        # log.warn(objects)
         return objects
 
     @register("vtk.camera.reset")
