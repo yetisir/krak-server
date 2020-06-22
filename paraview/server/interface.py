@@ -1,10 +1,13 @@
 import logging
 import sys
+import json
 
 # from paraview.modules.vtkRemotingViews import vtkPVRenderView
 from paraview.web import protocols
 from paraview import simple
 from wslink import register
+
+from twisted.internet import task, reactor
 
 import docker
 
@@ -37,24 +40,21 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
     def stop_code(self):
         try:
             self.sandbox.kill()
-        except Exception:  # TODO: get proper exception
+        except docker.errors.NotFound:
             pass
         self.publish('code.set_status', 'killed')
 
     @register('code.run')
     def run_code(self, text):
-        log.warn('starting...')
-        log.warn(text)
-        log.warn('')
-
         # for source in simple.GetSources().values():
         #     simple.Hide(source)
-        simple.ResetSession()
+        # simple.ResetSession()
+
+        log.warn('spinning up container ...')
 
         # temporary - still insecure
         client = docker.from_env()
         try:
-            log.warn('top')
             self.sandbox = client.containers.run(
                 image='krak-server_sandbox',
                 command=f'python -c "{text}"',
@@ -64,28 +64,23 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
                 remove=True,
             )
             self.publish('code.set_status', 'running')
-            log.warn('bottom')
 
         except Exception as e:
-            log.warn('error ....')
             log.error(e)
             return
 
-        log.warn('donee')
+        log.warn('created container')
+        self.output_generator = self.sandbox.logs(stream=True)
 
-        # output = self.sandbox.logs(stream=True)
-        # #     log.warn(logs)
-
-        # while True:
-        #     try:
-        #         log.warn('test')
-        #         log.warn(output.next())
-        #     except StopIteration:
-        #         break
-        # log.warn('donee-5')
-
-    # @register('code.stdout')
-    # def getCodeStdout
+    @register('code.push_output')
+    def push_output(self):
+        try:
+            self.sandbox.reload()
+            # output = self.output_generator.__next__().decode().strip()
+            [log.warn(output) for output in self.output_generator]
+            reactor.callLater(1, self.push_output)
+        except docker.errors.APIError:
+            self.publish('code.set_status', 'exited')
 
     @register('code.status')
     def code_status(self):

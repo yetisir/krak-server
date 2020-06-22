@@ -1,4 +1,4 @@
-import store from '@/store/index';
+import store from '@/store';
 
 // CODE API
 function setCodeStatus(status) {
@@ -22,6 +22,7 @@ export default function createMethods(session) {
     runCode: (code) => session.call('code.run', [code]),
     stopCode: () => session.call('code.stop', []),
     getCodeStatus: () => session.call('code.get_status', []),
+    pushOutput: () => session.call('code.push_output', []),
 
     // Old API
     createVisualization: () => session.call('vtk.initialize', []),

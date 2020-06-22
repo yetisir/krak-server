@@ -54,15 +54,19 @@ export default {
       this.aceEditor.setValue(code);
     },
     getCode() {
+      console.log('dock' + this.aceEditor.getValue());
       return this.aceEditor.getValue();
     },
     buttonRun() {
-      const method = this.codeStatus ? 'CODE_RUN' : 'CODE_STOP';
-      console.log(method);
-      this.$store
-        .dispatch(method)
-        // .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'))
-        .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
+      if (this.codeStatus == 'running') {
+        this.$store
+          .dispatch('CODE_STOP')
+          .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
+      } else {
+        this.$store
+          .dispatch('CODE_RUN', this.getCode())
+          .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
+      }
     },
     buttonUpdate(code_status) {
       if (code_status == 'running') {

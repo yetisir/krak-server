@@ -79,6 +79,7 @@ export default {
         return;
       }
       client.getRemote().Code.runCode(code);
+      // client.getRemote().Code.pushOutput(); *************
       commit('CODE_STATUS_SET', 'submitted');
       // if (client) {
       //   // client.getRemote().Cone.runCode(text);
