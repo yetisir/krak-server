@@ -17,6 +17,7 @@ export default {
     });
     this.aceEditor.setAutoScrollEditorIntoView(true);
     // this.pollStatus();
+    this.buttonUpdate('exited');
   },
   data() {
     return {
@@ -44,17 +45,7 @@ export default {
       this.aceEditor.setTheme(newTheme);
     },
     codeStatus(newStatus) {
-      if (newStatus == 'running') {
-        this.buttonLoading = false;
-        this.buttonColor = 'red';
-        this.buttonIcon = 'mdi-stop';
-      } else if (newStatus === 'submitted') {
-        this.buttonLoading = true;
-      } else {
-        this.newStatus = false;
-        this.buttonColor = 'green';
-        this.buttonIcon = 'mdi-play';
-      }
+      this.buttonUpdate(newStatus);
     },
   },
 
@@ -65,12 +56,26 @@ export default {
     getCode() {
       return this.aceEditor.getValue();
     },
-    runCode() {
+    buttonRun() {
       const method = this.codeStatus ? 'CODE_RUN' : 'CODE_STOP';
+      console.log(method);
       this.$store
-        .dispatch(method, this.getCode())
+        .dispatch(method)
         // .then(this.$store.dispatch('CONE_UPDATE_OBJECTS'))
         .then(this.$store.dispatch('VIEW_UPDATE_RESIZE'));
+    },
+    buttonUpdate(code_status) {
+      if (code_status == 'running') {
+        this.buttonLoading = false;
+        this.buttonColor = 'red';
+        this.buttonIcon = 'mdi-stop';
+      } else if (code_status === 'submitted') {
+        this.buttonLoading = true;
+      } else {
+        this.buttonLoading = false;
+        this.buttonColor = 'green';
+        this.buttonIcon = 'mdi-play';
+      }
     },
     // pollStatus() {
     //   setInterval(() => {

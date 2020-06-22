@@ -34,42 +34,64 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         view.Background = color
 
     @register('code.stop')
-    def stopCode(self):
-        log.warn('stopping...')
-        if self.sandbox is not None:
+    def stop_code(self):
+        try:
             self.sandbox.kill()
+        except Exception:  # TODO: get proper exception
+            pass
+        self.publish('code.set_status', 'killed')
 
-    @register("code.run")
-    def runCode(self, text):
+    @register('code.run')
+    def run_code(self, text):
         log.warn('starting...')
         log.warn(text)
-        for source in simple.GetSources().values():
-            simple.Hide(source)
+        log.warn('')
+
+        # for source in simple.GetSources().values():
+        #     simple.Hide(source)
         simple.ResetSession()
 
         # temporary - still insecure
         client = docker.from_env()
         try:
+            log.warn('top')
             self.sandbox = client.containers.run(
                 image='krak-server_sandbox',
                 command=f'python -c "{text}"',
-                detach=False,
+                detach=True,
+                # stream=True,
                 network='krak-server_default',
                 remove=True,
             )
+            self.publish('code.set_status', 'running')
+            log.warn('bottom')
+
         except Exception as e:
             log.warn('error ....')
             log.error(e)
-            raise e
+            return
+
+        log.warn('donee')
+
+        # output = self.sandbox.logs(stream=True)
+        # #     log.warn(logs)
+
+        # while True:
+        #     try:
+        #         log.warn('test')
+        #         log.warn(output.next())
+        #     except StopIteration:
+        #         break
+        # log.warn('donee-5')
 
     # @register('code.stdout')
     # def getCodeStdout
 
     @register('code.status')
-    def getCodeStatus(self):
+    def code_status(self):
 
-        log.warn('bigbig')
-        self.publish('code.stdout', 'bigbigbig')
+        # log.warn('bigbig')
+        # self.publish('code.stdout', 'bigbigbig')
 
         try:
             self.sandbox.reload()

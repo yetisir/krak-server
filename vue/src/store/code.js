@@ -18,6 +18,7 @@ export default {
     //   state.objects = value;
     // },
     CODE_STATUS_SET(state, value) {
+      console.log('here: ' + value);
       state.codeStatus = value;
     },
   },
@@ -72,13 +73,13 @@ export default {
     //     .catch(console.error);
     // }
     // },
-    CODE_RUN({ rootState }, code) {
+    CODE_RUN({ rootState, commit }, code) {
       const client = rootState.network.client;
-      if (~client) {
+      if (!client) {
         return;
       }
       client.getRemote().Code.runCode(code);
-
+      commit('CODE_STATUS_SET', 'submitted');
       // if (client) {
       //   // client.getRemote().Cone.runCode(text);
       //   if (getters.CODE_STATUS === 'running') {
@@ -91,7 +92,7 @@ export default {
     },
     CODE_STOP({ rootState }) {
       const client = rootState.network.client;
-      if (~client) {
+      if (!client) {
         return;
       }
       client.getRemote().Code.stopCode();

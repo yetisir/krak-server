@@ -1,6 +1,9 @@
+import store from '@/store/index';
+
 // CODE API
 function setCodeStatus(status) {
-  console.log('setting_code_status: ' + status);
+  console.log(store);
+  store.commit('CODE_STATUS_SET', status);
 }
 
 // Old API
@@ -10,15 +13,15 @@ function handleMessage(data) {
 
 export default function createMethods(session) {
   // Code API
-  session.subscribe('setCodeStatus', setCodeStatus);
+  session.subscribe('code.set_status', setCodeStatus);
 
   // Old API
   session.subscribe('code.stdout', handleMessage);
   return {
     // Code API
-    runCode: (code) => session.call('runCode', [code]),
-    stopCode: () => session.call('stopCoce', []),
-    getCodeStatus: () => session.call('getCodeStatus', []),
+    runCode: (code) => session.call('code.run', [code]),
+    stopCode: () => session.call('code.stop', []),
+    getCodeStatus: () => session.call('code.get_status', []),
 
     // Old API
     createVisualization: () => session.call('vtk.initialize', []),
