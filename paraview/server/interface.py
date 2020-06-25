@@ -22,10 +22,10 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         super().__init__(*args, **kwargs)
         self.sandbox = None
 
-    @register("vtk.initialize")
-    def createVisualization(self):
-        simple.Show(simple.Sphere())
-        return self.resetCamera()
+    # @register("vtk.initialize")
+    # def createVisualization(self):
+    #     # simple.Show(simple.Sphere())
+    #     return self.resetCamera()
 
     @register('vtk.set_background')
     def set_background(self, dark):
@@ -92,17 +92,17 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         except Exception:  # TODO: usea proper exception
             return 'exited'
 
-    @register('data.objects')
-    def getKrakObjects(self):
-        objects = []
-        # for obj in krak.object_registry.values():
-        #     objects.append({
-        #         'id': obj.id,
-        #         'type': obj.type,
-        #         'kwargs': obj.kwargs,
-        #     })
-        # log.warn(objects)
-        return objects
+    # @register('data.objects')
+    # def getKrakObjects(self):
+    #     objects = []
+    #     # for obj in krak.object_registry.values():
+    #     #     objects.append({
+    #     #         'id': obj.id,
+    #     #         'type': obj.type,
+    #     #         'kwargs': obj.kwargs,
+    #     #     })
+    #     # log.warn(objects)
+    #     return objects
 
     @register("vtk.reset_camera")
     def resetCamera(self):

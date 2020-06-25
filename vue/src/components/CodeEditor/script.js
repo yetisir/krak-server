@@ -16,7 +16,7 @@ export default {
       tabSize: 4,
     });
     this.aceEditor.setAutoScrollEditorIntoView(true);
-    this.buttonUpdate('loading');
+    this.buttonUpdate('exited');
   },
   data() {
     return {
@@ -25,6 +25,10 @@ export default {
       buttonColor: '',
       buttonIcon: '',
       buttonLoading: false,
+      snackbar: false,
+      snackbarText: '',
+      snackbarTimeout: null,
+      snackbarColor: 'gray',
     };
   },
   computed: {
@@ -45,6 +49,9 @@ export default {
     },
     codeStatus(newStatus) {
       this.buttonUpdate(newStatus);
+    },
+    snackbarText() {
+      this.snackbar = true;
     },
   },
 
@@ -71,12 +78,18 @@ export default {
         this.buttonLoading = false;
         this.buttonColor = 'red';
         this.buttonIcon = 'mdi-stop';
+        this.snackbarText = 'Running model ...';
       } else if (code_status === 'submitted') {
         this.buttonLoading = true;
+        this.snackbarText = 'Submitting model ...';
+      } else if (code_status === 'killrequested') {
+        this.buttonLoading = true;
+        this.snackbarText = 'Killing model ...';
       } else {
         this.buttonLoading = false;
         this.buttonColor = 'green';
         this.buttonIcon = 'mdi-play';
+        this.snackbarText = 'Server ready to accept model ...';
       }
     },
   },

@@ -32,7 +32,7 @@ export default {
         return;
       }
       client.getRemote().Code.stopCode();
-      commit('CODE_STATUS_SET', 'submitted');
+      commit('CODE_STATUS_SET', 'killrequested');
     },
   },
 };

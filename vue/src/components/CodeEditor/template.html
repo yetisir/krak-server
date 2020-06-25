@@ -17,4 +17,11 @@
   >
     <v-icon color="white">{{buttonIcon}}</v-icon>
   </v-btn>
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="snackbarTimeout"
+    :color="snackbarColor"
+  >
+    {{snackbarText}}
+  </v-snackbar>
 </v-container>

@@ -1,9 +1,10 @@
-import VtkView from '@/components/widgets/VtkView';
-import RemoteRenderingView from '@/components/widgets/RemoteRenderingView';
-import ProgressBar from '@/components/widgets/ProgressBar';
-import NavigationDrawer from '@/components/widgets/NavigationDrawer';
-import CodeEditor from '@/components/widgets/CodeEditor';
-import AppBar from '@/components/widgets/AppBar';
+import VtkView from '@/components/VtkView';
+import RemoteRenderingView from '@/components/RemoteRenderingView';
+import ProgressBar from '@/components/ProgressBar';
+import NavigationDrawer from '@/components/NavigationDrawer';
+import CodeEditor from '@/components/CodeEditor';
+import GitPipeline from '@/components/GitPipeline';
+import AppBar from '@/components/AppBar';
 
 export default {
   name: 'App',
@@ -14,6 +15,7 @@ export default {
     NavigationDrawer,
     CodeEditor,
     AppBar,
+    GitPipeline,
   },
   computed: {
     client() {
@@ -28,8 +30,8 @@ export default {
       // Setup view for remote rendering
       this.$store.dispatch('VIEW_REMOTE_RENDERING_SETUP');
 
-      // This only happen once when the connection is ready
-      this.$store.dispatch('VTK_INITIALIZE');
+      // // This only happen once when the connection is ready
+      // this.$store.dispatch('VTK_INITIALIZE');
     },
   },
 
