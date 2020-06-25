@@ -18,7 +18,6 @@ export default {
     //   state.objects = value;
     // },
     CODE_STATUS_SET(state, value) {
-      console.log('here: ' + value);
       state.codeStatus = value;
     },
   },
@@ -78,8 +77,10 @@ export default {
       if (!client) {
         return;
       }
-      client.getRemote().Code.runCode(code);
-      // client.getRemote().Code.pushOutput(); *************
+      client
+        .getRemote()
+        .Code.runCode(code)
+        .then(client.getRemote().Code.pushOutput());
       commit('CODE_STATUS_SET', 'submitted');
       // if (client) {
       //   // client.getRemote().Cone.runCode(text);

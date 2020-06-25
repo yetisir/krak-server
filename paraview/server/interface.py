@@ -57,7 +57,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         try:
             self.sandbox = client.containers.run(
                 image='krak-server_sandbox',
-                command=f'python -c "{text}"',
+                command=f'python -u -c "{text}"',
                 detach=True,
                 # stream=True,
                 network='krak-server_default',
@@ -72,14 +72,22 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         log.warn('created container')
         self.output_generator = self.sandbox.logs(stream=True)
 
+        # self.push_output()
+
     @register('code.push_output')
     def push_output(self):
+
+        reactor.callInThread(self._push_output)
+
+    def _push_output(self):
         try:
             self.sandbox.reload()
             # output = self.output_generator.__next__().decode().strip()
-            [log.warn(output) for output in self.output_generator]
-            reactor.callLater(1, self.push_output)
+            for output in self.output_generator:
+                log.warn(output)
+            self.push_output()
         except docker.errors.APIError:
+            # self.push_loop.stop()
             self.publish('code.set_status', 'exited')
 
     @register('code.status')
