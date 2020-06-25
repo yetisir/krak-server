@@ -36,12 +36,7 @@ export default {
   },
   watch: {
     dark() {
-      // if (this.dark) {
-      //   this.view.setBackground([0.9, 0.1, 0.1, 0]);
-      // } else {
-      //   this.view.setBackground([0.9, 0.9, 0.9, 0]);
-      // }
-      this.$store.dispatch('CONE_SET_BACKGROUND', this.dark);
+      this.$store.dispatch('VTK_SET_BACKGROUND', this.dark);
     },
   },
 };

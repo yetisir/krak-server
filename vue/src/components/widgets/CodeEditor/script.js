@@ -16,8 +16,7 @@ export default {
       tabSize: 4,
     });
     this.aceEditor.setAutoScrollEditorIntoView(true);
-    // this.pollStatus();
-    this.buttonUpdate('exited');
+    this.buttonUpdate('loading');
   },
   data() {
     return {
@@ -54,7 +53,6 @@ export default {
       this.aceEditor.setValue(code);
     },
     getCode() {
-      console.log('dock' + this.aceEditor.getValue());
       return this.aceEditor.getValue();
     },
     buttonRun() {
@@ -81,11 +79,5 @@ export default {
         this.buttonIcon = 'mdi-play';
       }
     },
-    // pollStatus() {
-    //   setInterval(() => {
-    //     this.$store.dispatch('CODE_UPDATE');
-    //     console.log('loading ' + this.codeRunning + ' ' + this.buttonLoading);
-    //   }, 100);
-    // },
   },
 };

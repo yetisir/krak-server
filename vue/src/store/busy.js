@@ -22,11 +22,8 @@ export default {
   },
   actions: {
     BUSY_UPDATE_PROGRESS({ state, commit }, delta = 0.5) {
-      if (state.count) {
-        commit('BUSY_PROGRESS_SET', state.progress + delta);
-      } else {
-        commit('BUSY_PROGRESS_SET', 0);
-      }
+      const count = state.count ? state.progress + delta : 0;
+      commit('BUSY_PROGRESS_SET', count);
     },
   },
 };

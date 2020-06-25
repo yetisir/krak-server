@@ -27,7 +27,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         simple.Show(simple.Sphere())
         return self.resetCamera()
 
-    @register('vtk.background.set')
+    @register('vtk.set_background')
     def set_background(self, dark):
         view = simple.GetRenderView()
         if dark is True:
@@ -46,20 +46,18 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
 
     @register('code.run')
     def run_code(self, text):
-        # for source in simple.GetSources().values():
-        #     simple.Hide(source)
+        for source in simple.GetSources().values():
+            simple.Delete(source)
         # simple.ResetSession()
 
         log.warn('spinning up container ...')
 
-        # temporary - still insecure
         client = docker.from_env()
         try:
             self.sandbox = client.containers.run(
                 image='krak-server_sandbox',
                 command=f'python -u -c "{text}"',
                 detach=True,
-                # stream=True,
                 network='krak-server_default',
                 remove=True,
             )
@@ -72,30 +70,21 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         log.warn('created container')
         self.output_generator = self.sandbox.logs(stream=True)
 
-        # self.push_output()
-
     @register('code.push_output')
     def push_output(self):
-
         reactor.callInThread(self._push_output)
 
     def _push_output(self):
         try:
             self.sandbox.reload()
-            # output = self.output_generator.__next__().decode().strip()
             for output in self.output_generator:
                 log.warn(output)
             self.push_output()
         except docker.errors.APIError:
-            # self.push_loop.stop()
             self.publish('code.set_status', 'exited')
 
     @register('code.status')
     def code_status(self):
-
-        # log.warn('bigbig')
-        # self.publish('code.stdout', 'bigbigbig')
-
         try:
             self.sandbox.reload()
             status = self.sandbox.status
@@ -115,7 +104,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         # log.warn(objects)
         return objects
 
-    @register("vtk.camera.reset")
+    @register("vtk.reset_camera")
     def resetCamera(self):
         view = self.getView('-1')
         simple.Render(view)
@@ -137,29 +126,29 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
 
         viewProxy = self.getView(event['view'])
         if viewProxy and 'spinY' in event:
-            rootId = viewProxy.GetGlobalIDAsString()
+            # rootId = viewProxy.GetGlobalIDAsString()
             zoomFactor = 1.0 - event['spinY'] / 10.0
 
-            if rootId in self.linkedViews:
-                fp = viewProxy.CameraFocalPoint
-                pos = viewProxy.CameraPosition
-                delta = [fp[i] - pos[i] for i in range(3)]
-                viewProxy.GetActiveCamera().Zoom(zoomFactor)
-                viewProxy.UpdatePropertyInformation()
-                pos2 = viewProxy.CameraPosition
-                viewProxy.CameraFocalPoint = [
-                    pos2[i] + delta[i] for i in range(3)]
-                dstViews = [self.getView(vid) for vid in self.linkedViews]
-                pushCamera(viewProxy, dstViews)
-            else:
-                fp = viewProxy.CameraFocalPoint
-                pos = viewProxy.CameraPosition
-                delta = [fp[i] - pos[i] for i in range(3)]
-                viewProxy.GetActiveCamera().Zoom(zoomFactor)
-                viewProxy.UpdatePropertyInformation()
-                pos2 = viewProxy.CameraPosition
-                viewProxy.CameraFocalPoint = [
-                    pos2[i] + delta[i] for i in range(3)]
+            # if rootId in self.linkedViews:
+            #     fp = viewProxy.CameraFocalPoint
+            #     pos = viewProxy.CameraPosition
+            #     delta = [fp[i] - pos[i] for i in range(3)]
+            #     viewProxy.GetActiveCamera().Zoom(zoomFactor)
+            #     viewProxy.UpdatePropertyInformation()
+            #     pos2 = viewProxy.CameraPosition
+            #     viewProxy.CameraFocalPoint = [
+            #         pos2[i] + delta[i] for i in range(3)]
+            #     dstViews = [self.getView(vid) for vid in self.linkedViews]
+            #     pushCamera(viewProxy, dstViews)
+            # else:
+            fp = viewProxy.CameraFocalPoint
+            pos = viewProxy.CameraPosition
+            delta = [fp[i] - pos[i] for i in range(3)]
+            viewProxy.GetActiveCamera().Zoom(zoomFactor)
+            viewProxy.UpdatePropertyInformation()
+            pos2 = viewProxy.CameraPosition
+            viewProxy.CameraFocalPoint = [
+                pos2[i] + delta[i] for i in range(3)]
 
         if 'End' in event["type"]:
             self.getApplication().InvokeEvent('EndInteractionEvent')

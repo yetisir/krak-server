@@ -38,7 +38,7 @@ export default {
       this.$refs.drawer.$el.style.width =
         document.body.scrollWidth - event.clientX + 'px';
       this.navigation.width = this.$refs.drawer.$el.style.width;
-      // this.triggerResize();
+      this.triggerResize();
     },
     setEvents() {
       // const drawerBorder = this.$refs.drawer.$el.querySelector(
@@ -72,6 +72,6 @@ export default {
 
   mounted() {
     this.setBorderWidth();
-    // this.setEvents();
+    this.setEvents();
   },
 };

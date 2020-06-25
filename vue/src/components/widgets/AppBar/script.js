@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     resetCamera() {
-      this.$store.dispatch('CONE_RESET_CAMERA');
+      this.$store.dispatch('VTK_RESET_CAMERA');
     },
   },
 };

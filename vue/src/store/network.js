@@ -19,9 +19,6 @@ export default {
     NETWORK_CONFIG(state) {
       return state.config;
     },
-    SSH_SOCK(state) {
-      return state.config;
-    },
   },
   mutations: {
     NETWORK_CLIENT_SET(state, client) {
@@ -29,9 +26,6 @@ export default {
     },
     NETWORK_CONFIG_SET(state, config) {
       state.config = config;
-    },
-    SSH_SOCK_SET(state, sock) {
-      state.ssh_sock = sock;
     },
   },
   actions: {
