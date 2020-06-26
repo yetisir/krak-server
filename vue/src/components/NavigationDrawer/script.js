@@ -1,6 +1,11 @@
 import { mapGetters } from 'vuex';
 
+import ObjectGraph from '@/components/ObjectGraph';
+
 export default {
+  components: {
+    ObjectGraph,
+  },
   data: () => {
     return {
       navigation: {
@@ -31,6 +36,9 @@ export default {
     },
   },
   methods: {
+    showGraph() {
+      this.$refs.objectGraph.showGraph = true;
+    },
     triggerResize() {
       window.dispatchEvent(new Event('resize'));
     },

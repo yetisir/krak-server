@@ -11,30 +11,58 @@ export default {
       id: 'objectGraph',
       canvas: null,
       dag: null,
-      data: {
-        id: 'Eve',
-        children: [
-          { id: 'Cain' },
-          { id: 'Seth', children: [{ id: 'Enos' }, { id: 'Noam' }] },
-          { id: 'Abel' },
-          { id: 'Awan', children: [{ id: 'Enoch' }] },
-          { id: 'Azura' },
-        ],
-      },
+      overlay: true,
+      data: [
+        {
+          id: 'Eve',
+        },
+        {
+          id: 'Cain',
+          parentIds: ['Eve'],
+        },
+        {
+          id: 'Seth',
+          parentIds: [],
+        },
+        {
+          id: 'Enos',
+          parentIds: ['Seth'],
+        },
+        {
+          id: 'Noam',
+          parentIds: ['Seth'],
+        },
+        {
+          id: 'Abel',
+          parentIds: ['Eve', 'Azura'],
+        },
+        {
+          id: 'Awan',
+          parentIds: ['Eve'],
+        },
+        {
+          id: 'Enoch',
+          parentIds: ['Eve', 'Enos'],
+        },
+        {
+          id: 'Azura',
+          parentIds: ['Eve', 'Cain'],
+        },
+      ],
     };
   },
   mounted() {
     this.canvas = d3
       .select(`#${this.id}`)
-      .attr('width', '100%')
-      .attr('height', '100%');
+      .attr('width', this.$refs.overlay.height)
+      .attr('height', this.$refs.overlay.width);
 
     this.calculateDAG();
     this.plotDAG();
   },
   methods: {
     calculateDAG() {
-      this.dag = d3.dagHierarchy()(this.data);
+      this.dag = d3.dagStratify()(this.data);
 
       const layout = d3
         .sugiyama()

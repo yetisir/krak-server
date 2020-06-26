@@ -1,3 +1,8 @@
-<div ref="graph">
-  <svg :id="id" class="chart"></svg>
-</div>
+<v-overlay ref="overlay" :value="overlay">
+  <div ref="graph">
+    <svg :id="id" class="chart"></svg>
+  </div>
+  <v-btn icon @click="overlay = false">
+    <v-icon>mdi-close</v-icon>
+  </v-btn>
+</v-overlay>
