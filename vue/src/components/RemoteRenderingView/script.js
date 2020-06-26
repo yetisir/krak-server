@@ -1,7 +1,6 @@
 import vtkRemoteView from 'vtk.js/Sources/Rendering/Misc/RemoteView';
 
 export default {
-  name: 'RemoteRenderView',
   props: {
     viewId: {
       type: String,

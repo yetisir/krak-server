@@ -1,7 +1,6 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'NavigationDrawer',
   data: () => {
     return {
       navigation: {

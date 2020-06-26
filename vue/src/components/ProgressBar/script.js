@@ -14,7 +14,6 @@ function width(value) {
 }
 
 export default {
-  name: 'ProgressBar',
   props: {
     progress: {
       type: Number,

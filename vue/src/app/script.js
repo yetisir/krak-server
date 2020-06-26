@@ -5,6 +5,7 @@ import NavigationDrawer from '@/components/NavigationDrawer';
 import CodeEditor from '@/components/CodeEditor';
 import GitPipeline from '@/components/GitPipeline';
 import AppBar from '@/components/AppBar';
+import ObjectGraph from '@/components/ObjectGraph';
 
 export default {
   name: 'App',
@@ -16,6 +17,7 @@ export default {
     CodeEditor,
     AppBar,
     GitPipeline,
+    ObjectGraph,
   },
   computed: {
     client() {

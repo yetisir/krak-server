@@ -35,7 +35,6 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
 
     @register('code.get')
     def get_code(self):
-        log.warn('test' + self.code)
         return self.code
 
     @register('code.stop')
@@ -45,6 +44,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         except docker.errors.NotFound:
             pass
         self.killed = True
+        log.warn('skilling container ...')
 
     @register('code.run')
     def run_code(self, code):
@@ -106,18 +106,6 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             return status
         except docker.errors.APIError:
             return 'completed'
-
-    # @register('data.objects')
-    # def getKrakObjects(self):
-    #     objects = []
-    #     # for obj in krak.object_registry.values():
-    #     #     objects.append({
-    #     #         'id': obj.id,
-    #     #         'type': obj.type,
-    #     #         'kwargs': obj.kwargs,
-    #     #     })
-    #     # log.warn(objects)
-    #     return objects
 
     @register("vtk.reset_camera")
     def resetCamera(self):
