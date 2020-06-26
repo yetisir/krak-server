@@ -11,10 +11,10 @@ export default function createMethods(session) {
     // Code API
     runCode: (code) => session.call('code.run', [code]),
     stopCode: () => session.call('code.stop', []),
+    getCode: () => session.call('code.get', []),
     pushOutput: () => session.call('code.push_output', []),
 
     // VTK API
-    // initializeVTK: () => session.call('vtk.initialize', []),
     resetCamera: () => session.call('vtk.reset_camera', []),
     setBackground: (dark) => session.call('vtk.set_background', [dark]),
   };

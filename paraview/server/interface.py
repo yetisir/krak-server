@@ -35,6 +35,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
 
     @register('code.get')
     def get_code(self):
+        log.warn('test' + self.code)
         return self.code
 
     @register('code.stop')

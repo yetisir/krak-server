@@ -7,6 +7,7 @@ import code from '@/store/code';
 import network from '@/store/network';
 import view from '@/store/view';
 import vtk from '@/store/vtk';
+import ui from '@/store/ui';
 
 Vue.use(Vuex);
 
@@ -17,5 +18,6 @@ export default new Vuex.Store({
     network,
     view,
     vtk,
+    ui,
   },
 });

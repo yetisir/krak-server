@@ -32,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['CODE_STATUS']),
+    ...mapGetters(['CODE_STATUS', 'NETWORK_CLIENT']),
     themePath() {
       return this.$vuetify.theme.dark
         ? 'ace/theme/clouds_midnight'
@@ -40,6 +40,12 @@ export default {
     },
     codeStatus() {
       return this.$store.getters.CODE_STATUS;
+    },
+    networkStatus() {
+      return this.$store.getters.NETWORK_CLIENT;
+    },
+    codeText() {
+      return this.$store.getters.CODE_TEXT;
     },
   },
 
@@ -52,6 +58,14 @@ export default {
     },
     snackbarText() {
       this.snackbar = true;
+    },
+    networkStatus(newStatus) {
+      if (newStatus) {
+        this.$store.dispatch('CODE_GET');
+      }
+    },
+    codeText() {
+      this.aceEditor.setValue(this.codeText);
     },
   },
 

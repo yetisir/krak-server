@@ -9,14 +9,13 @@
   <v-btn
     fab
     small
-    absolute
     :color="buttonColor"
     @click="buttonRun"
     :loading="buttonLoading"
     :disabled="buttonLoading"
     transition="fade"
   >
-    <v-icon color="white">{{buttonIcon}}</v-icon>
+    <v-icon>{{buttonIcon}}</v-icon>
   </v-btn>
   <v-snackbar
     v-model="snackbar"

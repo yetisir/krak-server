@@ -1,9 +1,9 @@
 <v-app>
   <progress-bar :progress="busyPercent" app />
   <app-bar app />
-  <!-- <navigation-drawer app /> -->
+  <navigation-drawer app />
 
-  <v-content>
+  <v-main>
     <vtk-view ref="vtkViewComponent" />
     <v-tabs>
       <v-tab>Editor</v-tab>
@@ -26,5 +26,5 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
-  </v-content>
+  </v-main>
 </v-app>

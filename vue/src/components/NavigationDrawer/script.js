@@ -1,4 +1,4 @@
-// import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'NavigationDrawer',
@@ -11,15 +11,24 @@ export default {
       right: true,
       permanent: true,
       expandOnHover: true,
-      dark: true,
+      navigationOption: null,
     };
   },
   computed: {
+    ...mapGetters(['UI_NAVIGATION_DRAWER']),
     objects() {
       return this.$store.state.code.objects;
     },
     isMouseover() {
       return this.$refs.drawer.isMouseover;
+    },
+    drawerOpen: {
+      get() {
+        return this.$store.getters.UI_NAVIGATION_DRAWER;
+      },
+      set(value) {
+        this.$store.commit('UI_NAVIGATION_DRAWER_SET', value);
+      },
     },
   },
   methods: {
