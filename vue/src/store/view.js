@@ -5,11 +5,11 @@ import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
 import vtkPolyData from 'vtk.js/Sources/Common/DataModel/PolyData';
 
 const ROTATION_STEP = 2;
-const VIEW_UPS = [
-  [0, 1, 0],
-  [0, 0, 1],
-  [0, 1, 0],
-];
+// const VIEW_UPS = [
+//   [0, 1, 0],
+//   [0, 0, 1],
+//   [0, 1, 0],
+// ];
 
 const actor = vtkActor.newInstance();
 const mapper = vtkMapper.newInstance();

@@ -28,7 +28,7 @@ export default {
       snackbar: false,
       snackbarText: '',
       snackbarTimeout: null,
-      snackbarColor: 'gray',
+      snackbarColor: 'grey',
     };
   },
   computed: {
@@ -79,17 +79,46 @@ export default {
         this.buttonColor = 'red';
         this.buttonIcon = 'mdi-stop';
         this.snackbarText = 'Running model ...';
-      } else if (code_status === 'submitted') {
+        this.snackbarColor = 'green lighten-2';
+        this.snackbarTimeout = null;
+      } else if (code_status == 'submitted') {
         this.buttonLoading = true;
         this.snackbarText = 'Submitting model ...';
-      } else if (code_status === 'killrequested') {
+        this.snackbarColor = 'green lighten-2';
+        this.snackbarTimeout = null;
+      } else if (code_status == 'killrequested') {
         this.buttonLoading = true;
         this.snackbarText = 'Killing model ...';
+        this.snackbarColor = 'orange lighten-2';
+        this.snackbarTimeout = null;
+      } else if (code_status == 'error') {
+        this.buttonLoading = false;
+        this.buttonColor = 'green';
+        this.buttonIcon = 'mdi-play';
+        this.snackbarTimeout = 2000;
+        this.snackbarText = 'Model error ...';
+        this.snackbarColor = 'red lighten-2';
+      } else if (code_status == 'completed') {
+        this.buttonLoading = false;
+        this.buttonColor = 'green';
+        this.buttonIcon = 'mdi-play';
+        this.snackbarTimeout = 2000;
+        this.snackbarText = 'Model completed successfully ...';
+        this.snackbarColor = 'green lighten-2';
+      } else if (code_status == 'killed') {
+        this.buttonLoading = false;
+        this.buttonColor = 'green';
+        this.buttonIcon = 'mdi-play';
+        this.snackbarTimeout = 2000;
+        this.snackbarText = 'Model killed ...';
+        this.snackbarColor = 'orange lighten-2';
       } else {
         this.buttonLoading = false;
         this.buttonColor = 'green';
         this.buttonIcon = 'mdi-play';
+        this.snackbarTimeout = 2000;
         this.snackbarText = 'Server ready to accept model ...';
+        this.snackbarColor = 'green lighten-2';
       }
     },
   },

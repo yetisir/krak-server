@@ -21,11 +21,8 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sandbox = None
-
-    # @register("vtk.initialize")
-    # def createVisualization(self):
-    #     # simple.Show(simple.Sphere())
-    #     return self.resetCamera()
+        self.code = ''
+        self.killed = False
 
     @register('vtk.set_background')
     def set_background(self, dark):
@@ -36,16 +33,21 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             color = [0.9, 0.9, 0.9]
         view.Background = color
 
+    @register('code.get')
+    def get_code(self):
+        return self.code
+
     @register('code.stop')
     def stop_code(self):
         try:
             self.sandbox.kill()
         except docker.errors.NotFound:
             pass
-        self.publish('code.set_status', 'killed')
+        self.killed = True
 
     @register('code.run')
-    def run_code(self, text):
+    def run_code(self, code):
+        self.code = code
         for source in simple.GetSources().values():
             simple.Delete(source)
         # simple.ResetSession()
@@ -56,7 +58,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         try:
             self.sandbox = client.containers.run(
                 image='krak-server_sandbox',
-                command=f'python -u -c "{text}"',
+                command=f'python -u -c "{code}"',
                 detach=True,
                 network='krak-server_default',
                 remove=True,
@@ -68,20 +70,32 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             return
 
         log.warn('created container')
-        self.output_generator = self.sandbox.logs(stream=True)
+        self.stdout_generator = self.sandbox.logs(
+            stream=True, stdout=True, stderr=False)
+        self.stderr_generator = self.sandbox.logs(
+            stream=True, stderr=True, stdout=False)
 
     @register('code.push_output')
     def push_output(self):
         reactor.callInThread(self._push_output)
 
     def _push_output(self):
-        try:
-            self.sandbox.reload()
-            for output in self.output_generator:
-                log.warn(output)
-            self.push_output()
-        except docker.errors.APIError:
-            self.publish('code.set_status', 'exited')
+        while 1:
+            try:
+                self.sandbox.reload()
+                for output in self.stdout_generator:
+                    log.warn('stdout: ' + output.decode())
+                for output in self.stderr_generator:
+                    log.warn('stderr: ' + output.decode())
+                    self.publish('code.set_status', 'error')
+                    return
+            except docker.errors.APIError:
+                if self.killed:
+                    self.killed = False
+                    self.publish('code.set_status', 'killed')
+                else:
+                    self.publish('code.set_status', 'completed')
+                return
 
     @register('code.status')
     def code_status(self):
@@ -89,8 +103,8 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
             self.sandbox.reload()
             status = self.sandbox.status
             return status
-        except Exception:  # TODO: usea proper exception
-            return 'exited'
+        except docker.errors.APIError:
+            return 'completed'
 
     # @register('data.objects')
     # def getKrakObjects(self):

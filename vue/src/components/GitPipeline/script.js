@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VuePipeline from 'vue-pipeline';
+
 Vue.use(VuePipeline);
 
 export default {

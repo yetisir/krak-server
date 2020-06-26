@@ -3,7 +3,6 @@ import store from '@/store';
 export default function createMethods(session) {
   // Code API
   session.subscribe('code.set_status', (status) => {
-    console.log(store);
     store.commit('CODE_STATUS_SET', status);
     store.dispatch('VTK_RESET_CAMERA');
   });
