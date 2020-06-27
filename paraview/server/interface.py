@@ -18,6 +18,9 @@ log.info('testing')
 
 class KrakProtocol(protocols.ParaViewWebProtocol):
 
+    # TODO: find better way of passing data between classes
+    _object_graph = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sandbox = None
@@ -97,6 +100,10 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
                 else:
                     self.publish('code.set_status', 'completed')
                 return
+
+    @register('data.get_objects')
+    def get_objects(self):
+        return self._object_graph
 
     @register('code.status')
     def code_status(self):

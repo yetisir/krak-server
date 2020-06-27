@@ -1,6 +1,20 @@
 <v-app>
   <progress-bar :progress="busyPercent" app />
   <app-bar app />
+
+  <!-- TEMP -->
+  <v-navigation-drawer
+    app
+    permanent
+    expand-on-hover
+    color="transparent"
+    width="500"
+    :style="`margin-top: ${$vuetify.application.top}px`"
+  >
+    <v-card color="transparent">
+      <object-graph ref="objectGraph" />
+    </v-card>
+  </v-navigation-drawer>
   <navigation-drawer app />
 
   <v-main>

@@ -33,8 +33,22 @@
     </v-list-item-group>
   </v-list>
 
-  <!-- <object-graph ref="objectGraph" /> -->
-  <!-- <v-tabs grow show-arrows>
+  <v-navigation-drawer
+    right
+    floating
+    absolute
+    expand-on-hover
+    v-bind="$attrs"
+    v-model="drawerOpen"
+    width="500"
+    :style="`margin-top: ${$vuetify.application.top}px`"
+  >
+  <v-card>
+    <object-graph ref="objectGraph" />
+  </v-card>
+</v-navigation-drawer>
+    <!-- <object-graph ref="objectGraph" /> -->
+    <!-- <v-tabs grow show-arrows>
     <v-tab>
       Objects
       <v-spacer />
@@ -72,4 +86,5 @@
       </v-card>
     </v-tab-item>
   </v-tabs> -->
+  </v-navigation-drawer>
 </v-navigation-drawer>

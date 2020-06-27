@@ -1,7 +1,9 @@
-// import cytoscape from 'cytoscape';
-// import jquery from 'jquery';
-// import contextMenus from 'cytoscape-context-menus';
-// import 'cytoscape-context-menus/cytoscape-context-menus.css';
+import { mapGetters } from 'vuex';
+
+import cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre';
+
+cytoscape.use(dagre);
 
 export default {
   // components: {
@@ -11,6 +13,7 @@ export default {
   // },
   data() {
     return {
+      overlay: false,
       style: [
         {
           selector: 'node',
@@ -33,14 +36,15 @@ export default {
         name: 'grid',
         rows: 1,
       },
-      elements: [
-        { data: { id: 'a' } },
-        { data: { id: 'b' } },
-        { data: { id: 'ab', source: 'a', target: 'b' } },
-      ],
+      // elements: [
+      //   { data: { id: 'a' } },
+      //   { data: { id: 'b' } },
+      //   { data: { id: 'ab', source: 'a', target: 'b' } },
+      // ],
     };
   },
   computed: {
+    ...mapGetters(['VTK_OBJECTS']),
     config: function() {
       return {
         style: this.style,
@@ -48,13 +52,17 @@ export default {
         elements: this.elements,
       };
     },
+    elements: function() {
+      return this.$store.getters.VTK_OBJECTS;
+    },
   },
   methods: {
     preConfig: function() {
       // contextMenus(cytoscape, jquery);
       // cytoscape.use(jquery);
     },
-    afterCreated: function(cy) {
+    afterCreated: function() {
+      // afterCreated: function(cy) {
       // cy.contextMenus({
       //   menuItems: [
       //     {

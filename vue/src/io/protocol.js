@@ -14,6 +14,9 @@ export default function createMethods(session) {
     getCode: () => session.call('code.get', []),
     pushOutput: () => session.call('code.push_output', []),
 
+    // Data API
+    getObjects: () => session.call('data.get_objects', []),
+
     // VTK API
     resetCamera: () => session.call('vtk.reset_camera', []),
     setBackground: (dark) => session.call('vtk.set_background', [dark]),

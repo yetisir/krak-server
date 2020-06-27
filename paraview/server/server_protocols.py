@@ -82,3 +82,30 @@ class TCPSocketServerProtocol(basic.LineReceiver):
             paraview_connection.GetClientSideObject().SetOutput(vtk_object)
 
             simple.Show(paraview_connection)
+
+        # TODO: Find beter way of communicating between classes
+        import interface
+        interface.KrakProtocol._object_graph = self.constructGraph(objects)
+
+    def constructGraph(self, objects):
+        object_graph = []
+        for child in objects:
+            child_name = child['name']
+            object_graph.append({
+                'data': {
+                    'id': child_name,
+                }
+            })
+
+            for parent in child['parents']:
+                parent_name = parent['name']
+                object_graph.append({
+                    'data': {
+                        'id': f'{parent_name}_{child_name}',
+                        'source': parent_name,
+                        'target': child_name,
+                    }
+                })
+                object_graph.extend(self.constructGraph(child['parents']))
+
+        return object_graph
