@@ -3,7 +3,6 @@
   top: 0;
   height: 2px;
   z-index: 10;
-
 }
 
 .active {
@@ -13,5 +12,5 @@
 
 .inactive {
   composes: container;
-  transition: width 250ms cubic-bezier(1,0,1,0), opacity 250ms ease-in;
+  transition: width 250ms cubic-bezier(1, 0, 1, 0), opacity 250ms ease-in;
 }
