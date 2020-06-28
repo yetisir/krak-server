@@ -77,7 +77,7 @@ def _websocket_server(options):
     reactor.listenTCP(options.port, site)
 
 
-def _tcp_server(options):
+def _tcp_socket_server(options):
     factory = protocol.ServerFactory()
     factory.protocol = server_protocols.TCPSocketServerProtocol
     reactor.listenTCP(1235, factory)
@@ -87,7 +87,7 @@ def start(options):
     _set_logging(options.debug)
 
     _websocket_server(options)
-    _tcp_server(options)
+    _tcp_socket_server(options)
 
     reactor.callWhenRunning(
         lambda: log.msg('wslink: Starting factory', logLevel=logging.CRITICAL))

@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex';
+// // import { mapGetters } from 'vuex';
 
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -6,90 +6,224 @@ import dagre from 'cytoscape-dagre';
 cytoscape.use(dagre);
 
 export default {
-  // components: {
-  //   GraphJob,
-  //   GraphNetwork,
-  //   GraphNode,
-  // },
   data() {
     return {
-      overlay: false,
-      style: [
-        {
-          selector: 'node',
-          style: {
-            'background-color': '#666',
-            label: 'data(id)',
-          },
-        },
-        {
-          selector: 'edge',
-          style: {
-            width: 3,
-            'line-color': '#ccc',
-            'target-arrow-color': '#ccc',
-            'target-arrow-shape': 'triangle',
-          },
-        },
-      ],
+      // cy: null,
+      overlay: true,
+      // graph: null,
+      style: cytoscape
+        .stylesheet()
+        .selector('node')
+        .css({
+          shape: 'data(faveShape)',
+          width: 'mapData(weight, 40, 80, 20, 60)',
+          content: 'data(name)',
+          'text-valign': 'center',
+          'text-outline-width': 2,
+          'text-outline-color': 'data(faveColor)',
+          'background-color': 'data(faveColor)',
+          color: '#fff',
+        })
+        .selector(':selected')
+        .css({
+          'border-width': 3,
+          'border-color': '#333',
+        })
+        .selector('edge')
+        .css({
+          'curve-style': 'bezier',
+          opacity: 0.666,
+          width: 'mapData(strength, 70, 100, 2, 6)',
+          'target-arrow-shape': 'triangle',
+          'source-arrow-shape': 'circle',
+          'line-color': 'data(faveColor)',
+          'source-arrow-color': 'data(faveColor)',
+          'target-arrow-color': 'data(faveColor)',
+        })
+        .selector('edge.questionable')
+        .css({
+          'line-style': 'dotted',
+          'target-arrow-shape': 'diamond',
+        })
+        .selector('.faded')
+        .css({
+          opacity: 0.25,
+          'text-opacity': 0,
+        }),
       layout: {
-        name: 'grid',
-        rows: 1,
+        name: 'cose',
+        padding: 10,
       },
-      // elements: [
-      //   { data: { id: 'a' } },
-      //   { data: { id: 'b' } },
-      //   { data: { id: 'ab', source: 'a', target: 'b' } },
-      // ],
+      elements: {
+        nodes: [
+          {
+            data: {
+              id: 'j',
+              name: 'Jerry',
+              weight: 65,
+              faveColor: '#6FB1FC',
+              faveShape: 'triangle',
+            },
+          },
+          {
+            data: {
+              id: 'e',
+              name: 'Elaine',
+              weight: 45,
+              faveColor: '#EDA1ED',
+              faveShape: 'ellipse',
+            },
+          },
+          {
+            data: {
+              id: 'k',
+              name: 'Kramer',
+              weight: 75,
+              faveColor: '#86B342',
+              faveShape: 'octagon',
+            },
+          },
+          {
+            data: {
+              id: 'g',
+              name: 'George',
+              weight: 70,
+              faveColor: '#F5A45D',
+              faveShape: 'rectangle',
+            },
+          },
+        ],
+        edges: [
+          {
+            data: {
+              source: 'j',
+              target: 'e',
+              faveColor: '#6FB1FC',
+              strength: 90,
+            },
+          },
+          {
+            data: {
+              source: 'j',
+              target: 'k',
+              faveColor: '#6FB1FC',
+              strength: 70,
+            },
+          },
+          {
+            data: {
+              source: 'j',
+              target: 'g',
+              faveColor: '#6FB1FC',
+              strength: 80,
+            },
+          },
+
+          {
+            data: {
+              source: 'e',
+              target: 'j',
+              faveColor: '#EDA1ED',
+              strength: 95,
+            },
+          },
+          {
+            data: {
+              source: 'e',
+              target: 'k',
+              faveColor: '#EDA1ED',
+              strength: 60,
+            },
+            classes: 'questionable',
+          },
+
+          {
+            data: {
+              source: 'k',
+              target: 'j',
+              faveColor: '#86B342',
+              strength: 100,
+            },
+          },
+          {
+            data: {
+              source: 'k',
+              target: 'e',
+              faveColor: '#86B342',
+              strength: 100,
+            },
+          },
+          {
+            data: {
+              source: 'k',
+              target: 'g',
+              faveColor: '#86B342',
+              strength: 100,
+            },
+          },
+
+          {
+            data: {
+              source: 'g',
+              target: 'j',
+              faveColor: '#F5A45D',
+              strength: 90,
+            },
+          },
+        ],
+      },
     };
   },
   computed: {
-    ...mapGetters(['VTK_OBJECTS']),
+    // ...mapGetters(['VTK_OBJECTS']),
     config: function() {
       return {
         style: this.style,
         layout: this.layout,
-        elements: this.elements,
+        // elements: this.elements,
       };
     },
-    elements: function() {
-      return this.$store.getters.VTK_OBJECTS;
+    // elements: function() {
+    //   return this.$store.getters.VTK_OBJECTS;
+    // },
+  },
+  mounted: function() {
+    console.log('test');
+    this.cy = cytoscape({
+      container: this.$refs.cy.$el,
+      layout: this.layout,
+      style: this.style,
+      elements: this.elements,
+    });
+  },
+  watch: {
+    overlay(newValue) {
+      console.log(newValue);
+      if (!newValue) {
+        this.$refs.cy.$el._cyreg.cy.json({});
+      }
     },
   },
   methods: {
-    preConfig: function() {
-      // contextMenus(cytoscape, jquery);
-      // cytoscape.use(jquery);
+    closeGraph() {
+      this.$refs.cy.$el._cyreg.cy.remove;
     },
-    afterCreated: function() {
-      // afterCreated: function(cy) {
-      // cy.contextMenus({
-      //   menuItems: [
-      //     {
-      //       id: 'remove',
-      //       content: 'remove',
-      //       tooltipText: 'remove',
-      //       image: { src: 'remove.svg', width: 12, height: 12, x: 6, y: 4 },
-      //       selector: 'node, edge',
-      //       onClickFunction: function(event) {
-      //         var target = event.target || event.cyTarget;
-      //         target.remove();
-      //       },
-      //       hasTrailingDivider: true,
-      //     },
-      //     {
-      //       id: 'hide',
-      //       content: 'hide',
-      //       tooltipText: 'hide',
-      //       selector: '*',
-      //       onClickFunction: function(event) {
-      //         var target = event.target || event.cyTarget;
-      //         target.hide();
-      //       },
-      //       disabled: false,
-      //     },
-      //   ],
-      // });
-    },
+    //     // addNode(event) {
+    //     //   console.log(event.target, this.$refs.cyRef.instance);
+    //     //   if (event.target === this.$refs.cyRef.instance)
+    //     //     console.log('adding node', event.target);
+    //     // },
+    //     // deleteNode(id) {
+    //     //   console.log('node clicked', id);
+    //     // },
+    //     // updateNode(event) {
+    //     //   console.log('right click node', event);
+    //     // },
+    //     // preConfig(cytoscape) {
+    //     //   console.log('calling pre-config', cytoscape);
+    //     // },
+    //     // afterCreated(cy) {
+    //     //   // cy: this is the cytoscape instance
+    //     //   console.log('after created', cy);
   },
 };
