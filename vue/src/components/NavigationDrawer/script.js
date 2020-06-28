@@ -36,9 +36,12 @@ export default {
     },
   },
   methods: {
-    showGraph() {
-      this.$refs.objectGraph.showGraph = true;
+    showObjectGraph: function() {
+      this.$store.commit('UI_OBJECT_GRAPH_SET', true);
     },
+    // showGraph() {
+    //   this.$refs.objectGraph.showGraph = true;
+    // },
     triggerResize() {
       window.dispatchEvent(new Event('resize'));
     },

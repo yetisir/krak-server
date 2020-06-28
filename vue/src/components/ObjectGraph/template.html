@@ -27,9 +27,10 @@
     />
   </cytoscape>
 </div> -->
-
-<v-overlay ref="cy" id="cy" :value="overlay">
-  <v-btn icon @click="overlay = false">
-    <v-icon>mdi-close</v-icon>
-  </v-btn>
-</v-overlay>
+<div>
+  <v-overlay ref="cy" id="cy" :value="show">
+    <v-btn icon @click="show = false">
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
+  </v-overlay>
+</div>

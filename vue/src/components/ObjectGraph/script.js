@@ -1,4 +1,4 @@
-// // import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -8,8 +8,9 @@ cytoscape.use(dagre);
 export default {
   data() {
     return {
+      // show: false,
       // cy: null,
-      overlay: true,
+      // overlay: true,
       // graph: null,
       style: cytoscape
         .stylesheet()
@@ -51,7 +52,7 @@ export default {
           'text-opacity': 0,
         }),
       layout: {
-        name: 'cose',
+        name: 'dagre',
         padding: 10,
       },
       elements: {
@@ -175,7 +176,7 @@ export default {
     };
   },
   computed: {
-    // ...mapGetters(['VTK_OBJECTS']),
+    ...mapGetters(['UI_OBJECT_GRAPH_SET']),
     config: function() {
       return {
         style: this.style,
@@ -183,31 +184,44 @@ export default {
         // elements: this.elements,
       };
     },
+    show: {
+      get: function() {
+        return this.$store.getters.UI_OBJECT_GRAPH;
+      },
+      set: function(value) {
+        this.$store.commit('UI_OBJECT_GRAPH_SET', value);
+      },
+    },
     // elements: function() {
     //   return this.$store.getters.VTK_OBJECTS;
     // },
   },
   mounted: function() {
-    console.log('test');
-    this.cy = cytoscape({
-      container: this.$refs.cy.$el,
-      layout: this.layout,
-      style: this.style,
-      elements: this.elements,
-    });
+    // console.log('test');
+    // this.cy = cytoscape({
+    //   container: this.$refs.cy.$el,
+    //   layout: this.layout,
+    //   style: this.style,
+    //   elements: this.elements,
+    // });
   },
   watch: {
-    overlay(newValue) {
+    show(newValue) {
       console.log(newValue);
       if (!newValue) {
-        this.$refs.cy.$el._cyreg.cy.json({});
+        // Temp hack to remove graph render
+        this.cy.remove('_none');
+      } else {
+        this.cy = cytoscape({
+          container: this.$refs.cy.$el,
+          layout: this.layout,
+          style: this.style,
+          elements: this.elements,
+        });
       }
     },
   },
   methods: {
-    closeGraph() {
-      this.$refs.cy.$el._cyreg.cy.remove;
-    },
     //     // addNode(event) {
     //     //   console.log(event.target, this.$refs.cyRef.instance);
     //     //   if (event.target === this.$refs.cyRef.instance)

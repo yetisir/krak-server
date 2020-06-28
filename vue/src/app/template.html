@@ -2,20 +2,9 @@
   <progress-bar :progress="busyPercent" app />
   <app-bar app />
 
-  <!-- TEMP -->
-  <!-- <v-navigation-drawer
-    app
-    permanent
-    expand-on-hover
-    color="transparent"
-    width="500"
-    :style="`margin-top: ${$vuetify.application.top}px`"
-  >
-    <v-card color="transparent">
-      <object-graph ref="objectGraph" />
-    </v-card>
-  </v-navigation-drawer> -->
   <navigation-drawer app />
+
+  <object-graph />
 
   <v-main>
     <vtk-view ref="vtkViewComponent" />
@@ -28,9 +17,7 @@
       </v-tab-item>
       <v-tab>Console</v-tab>
       <v-tab-item>
-        <v-card>
-          <object-graph />
-        </v-card>
+        <v-card> </v-card>
       </v-tab-item>
       <v-tab>Environment</v-tab>
       <v-tab-item>
