@@ -9,6 +9,7 @@ export default {
   },
   mutations: {
     VTK_OBJECTS_SET(state, value) {
+      console.log(value);
       state.objects = value;
     },
   },

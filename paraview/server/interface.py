@@ -84,6 +84,7 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
         reactor.callInThread(self._push_output)
 
     def _push_output(self):
+        stderr = False
         while 1:
             try:
                 self.sandbox.reload()
@@ -92,6 +93,8 @@ class KrakProtocol(protocols.ParaViewWebProtocol):
                 for output in self.stderr_generator:
                     log.warn('stderr: ' + output.decode())
                     self.publish('code.set_status', 'error')
+                    stderr = True
+                if stderr:
                     return
             except docker.errors.APIError:
                 if self.killed:

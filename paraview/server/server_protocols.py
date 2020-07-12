@@ -1,5 +1,6 @@
 import json
 import sys
+import logging
 
 import pyvista
 import numpy as np
@@ -13,6 +14,8 @@ from autobahn.twisted.resource import WebSocketResource
 
 import interface
 import server
+
+log = logging.Logger('default')
 
 
 class WebSocketServerProtocol(pv_wslink.PVServerProtocol):
@@ -85,27 +88,29 @@ class TCPSocketServerProtocol(basic.LineReceiver):
 
         # TODO: Find beter way of communicating between classes
         import interface
+
         interface.KrakProtocol._object_graph = self.constructGraph(objects)
 
     def constructGraph(self, objects):
-        object_graph = []
-        for child in objects:
-            child_name = child['name']
-            object_graph.append({
+        object_graph = {
+            'nodes': [],
+            'edges': [],
+        }
+        for obj in objects:
+            object_graph['nodes'].append({
                 'data': {
-                    'id': child_name,
-                }
+                    'id': obj['id'],
+                    'name': obj['name'],
+                },
             })
 
-            for parent in child['parents']:
-                parent_name = parent['name']
-                object_graph.append({
+            for parent in obj['parents']:
+                object_graph['edges'].append({
                     'data': {
-                        'id': f'{parent_name}_{child_name}',
-                        'source': parent_name,
-                        'target': child_name,
-                    }
+                        'source': parent,
+                        'target': obj['id'],
+                    },
                 })
-                object_graph.extend(self.constructGraph(child['parents']))
-
+        log.warn('objects')
+        log.warn(object_graph)
         return object_graph
