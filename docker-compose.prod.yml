@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  paraview:
+    volumes: []
+
+  webapp:
+    volumes: []
+    command: yarn build && npm serve -s dist
+
+  nginx:
+    build: ./nginx
+    ports:
+      - ${REVERSE_PROXY_PORT}:${REVERSE_PROXY_PORT}

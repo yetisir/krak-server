@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   # postgres:
@@ -36,45 +36,28 @@ services:
     volumes:
       - ./paraview:/opt/paraview/app
     ports:
-      - 1234:1234
-    environment:
-      - PROTOCOL="ws"
+      - $RENDER_SERVER_PORT:$RENDER_SERVER_PORT
     restart: always
-    # depends_on:
-    #   - sandbox
 
-  vue:
-    build: ./vue
+  webapp:
+    build: ./webapp
     ports:
-      - 80:8080
+      - ${WEB_CLIENT_PORT}:${WEB_CLIENT_PORT}
+    environment:
+      - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
+    env_file:
+      - "dev.env"
     volumes:
-      - ./vue/src:/app/src
+      - ./webapp/src:/app/src
+    command: yarn serve --port ${WEB_CLIENT_PORT}
     restart: always
     depends_on:
       - paraview
-        #- webssh
 
   sandbox:
     build: ./sandbox
-    ports:
-      - 5550:5550
-
-        #webssh:
-        #build: ./webssh
-        #ports:
-        #- 8888:8888
-        #restart: always
-    # depends_on:
-    #   - sandbox
-
-
-        #  nginx:
-        # build: ./nginx
-        #ports:
-        #  - 80:80
-
-volumes:
-  postgres:
-    driver: local
-  postgres_binary:
-    driver: local
+# volumes:
+#   postgres:
+#     driver: local
+#   postgres_binary:
+#     driver: local
