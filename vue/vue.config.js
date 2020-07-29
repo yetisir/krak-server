@@ -9,9 +9,10 @@ module.exports = {
     vtkChainWebpack(config);
   },
 
-  // devServer: {
-  //   disableHostCheck: true,
-  // },
+  devServer: {
+    disableHostCheck: true,
+	  headers: {'Access-Control-Allow-Origin': '*'},
+  },
 
   // configureWebpack: {
   //   // resolve: {

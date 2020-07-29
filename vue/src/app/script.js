@@ -44,7 +44,7 @@ export default {
     // Initiate network connection
     const config = {
       application: 'code',
-      sessionURL: 'ws://localhost:1234/ws',
+      sessionURL: 'ws://krak.yetisir.me:1234/ws',
     };
     this.$store.commit('NETWORK_CONFIG_SET', config);
     this.$store.dispatch('NETWORK_CONNECT');
