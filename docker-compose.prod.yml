@@ -1,14 +1,21 @@
 version: "3"
 
 services:
-  paraview:
+  render:
     volumes: []
 
   webapp:
+    build:
+      args:
+        - NODE_ENV=production
     volumes: []
-    command: yarn build && npm serve -s dist
-
+    # entrypoint: ["serve"]
+    # command: ["dist", "-l", "${WEB_CLIENT_PORT}"]
+    # env_file: ./webapp/.env.production
   nginx:
     build: ./nginx
     ports:
       - ${REVERSE_PROXY_PORT}:${REVERSE_PROXY_PORT}
+
+    depends_on:
+      - webapp

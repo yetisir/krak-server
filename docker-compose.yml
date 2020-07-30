@@ -48,10 +48,11 @@ services:
       - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
       - VUE_APP_RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
     env_file:
-      - "dev.env"
+      - ./webapp/.env.development
     volumes:
       - ./webapp/src:/app/src
-    command: yarn serve --port ${WEB_CLIENT_PORT}
+    entrypoint: ["yarn", "serve"]
+    command: ["--port", "${WEB_CLIENT_PORT}"]
     restart: always
     depends_on:
       - render
