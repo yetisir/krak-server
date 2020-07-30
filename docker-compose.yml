@@ -31,10 +31,11 @@ services:
   #   depends_on:
   #     - postgres
 
-  paraview:
-    build: ./paraview
+  render:
+    build: ./render
     volumes:
-      - ./paraview:/opt/paraview/app
+      - ./render:/opt/paraview/app
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - $RENDER_SERVER_PORT:$RENDER_SERVER_PORT
     restart: always
@@ -45,6 +46,7 @@ services:
       - ${WEB_CLIENT_PORT}:${WEB_CLIENT_PORT}
     environment:
       - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
+      - VUE_APP_RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
     env_file:
       - "dev.env"
     volumes:
@@ -52,7 +54,7 @@ services:
     command: yarn serve --port ${WEB_CLIENT_PORT}
     restart: always
     depends_on:
-      - paraview
+      - render
 
   sandbox:
     build: ./sandbox
