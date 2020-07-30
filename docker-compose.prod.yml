@@ -8,10 +8,11 @@ services:
     build:
       args:
         - NODE_ENV=production
+        - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
     volumes: []
-    # entrypoint: ["serve"]
-    # command: ["dist", "-l", "${WEB_CLIENT_PORT}"]
-    env_file: ./webapp/.env.production
+    entrypoint: ["serve"]
+    command: ["dist", "-l", "${WEB_CLIENT_PORT}"]
+    # env_file: ./webapp/.env.production
   nginx:
     build: ./nginx
     ports:

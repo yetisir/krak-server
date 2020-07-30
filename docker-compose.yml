@@ -41,7 +41,11 @@ services:
     restart: always
 
   webapp:
-    build: ./webapp
+    build:
+      context: ./webapp
+      args:
+        - NODE_ENV=development
+        - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
     ports:
       - ${WEB_CLIENT_PORT}:${WEB_CLIENT_PORT}
     environment:
