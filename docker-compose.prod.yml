@@ -11,7 +11,7 @@ services:
     volumes: []
     # entrypoint: ["serve"]
     # command: ["dist", "-l", "${WEB_CLIENT_PORT}"]
-    # env_file: ./webapp/.env.production
+    env_file: ./webapp/.env.production
   nginx:
     build: ./nginx
     ports:
