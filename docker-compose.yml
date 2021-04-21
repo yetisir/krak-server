@@ -51,8 +51,8 @@ services:
     environment:
       - RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
       - VUE_APP_RENDER_SERVER_PORT=${RENDER_SERVER_PORT}
-    env_file:
-      - ./webapp/.env.development
+    # env_file:
+    #   - ./webapp/.env.development
     volumes:
       - ./webapp/src:/app/src
     entrypoint: ["yarn", "serve"]
